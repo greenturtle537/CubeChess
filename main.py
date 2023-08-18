@@ -39,14 +39,40 @@ def ReadMods():
 
 def LoadMods():
   with open('game/.settings','r') as dotsettings:
-    dmLines = [line.replace('\n','') for line in dotsettings.readlines()]; dotsettings.close()
+    dsLines = [line.replace('\n','') for line in dotsettings.readlines()]; dotsettings.close()
+  for line in dsLines: 
+    match input('match: '):
+      case '1': print(1)
+      case '2': print(2)
+      case _ : print('else statemetn')
+
+
+
+def LoadSettings(): pass
+
+
+
+def StartGame(): pass
+
+def GetPlayer1Action(): pass
+
+def GetPlayer2Action(): pass
+
+def ServerProcess1(): pass
+def ServerProcess2(): pass
 
 ReadMods()
+LoadMods()
+LoadSettings()
 
 
 
-
-
+# gameplay
+StartGame()
+while True:
+  GetPlayer1Action()
+  ServerProcess1()
+  
 
 
 
