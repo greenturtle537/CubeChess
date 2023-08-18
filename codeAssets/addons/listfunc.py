@@ -1,0 +1,1 @@
+def AppendAtIndex(list:list, item:any, index:int) -> list: return list[:index+1] + [item] + list[index+1:]
