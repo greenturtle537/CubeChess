@@ -28,6 +28,27 @@ class piece:
 
 
 
+def ReadMods():
+  global dmLines
+  with open('game/.mods','r') as dotmods: 
+    dmLines = [line.replace('\n','') for line in dotmods.readlines()]; dotmods.close()
+  for i in range(len(dmLines)):
+    if dmLines[i][0] == 'p': dmLines[i] = 'game/modData/' + dmLines[i] + '.piece'; continue
+    if dmLines[i][0] == 'b': dmLines[i] = 'game/modData/' + dmLines[i] + '.board'; continue
+      
+
+def LoadMods():
+  with open('game/.settings','r') as dotsettings:
+    dmLines = [line.replace('\n','') for line in dotsettings.readlines()]; dotsettings.close()
+
+ReadMods()
+
+
+
+
+
+
+
 
 # class pawn(piece):
 #   def __init__(self):
