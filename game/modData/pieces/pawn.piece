@@ -1,6 +1,5 @@
 {
-  "id": "pa",
+  "id": "p",
   "movePath": [[0,1]],
-  "attackPath": [[-1,1],[1,1]],
-  "specialPath": "None"
+  "attackPath": [[-1,1],[1,1]]
 }

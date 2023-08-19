@@ -14,16 +14,6 @@ class Board:
         if array[y][x] == 1: self.validlocations.append((x,y))
 
 
-board = Board([ [1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1]]
-             )
-
 
 Pieces = []
 class piece:
@@ -65,7 +55,10 @@ def LoadMods():
 
 
 def LoadSettings(): 
-  dict = json.GetDict('game/settings')
+  data = json.GetDict('game/settings')
+  global board
+  board = Board(data['array'])
+  
   
 
 

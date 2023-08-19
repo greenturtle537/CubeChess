@@ -71,11 +71,11 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/connect":
       # Result 0: Username already in use
       # Result 1:
-      
+
       #username = de(query_components["username"])
       username = query_components["username"]
       userjson = jload("users.json")
-      if not username in userjson['name']:
+      if not {"name": username} in userjson:
         userjson.append({"name": username})
         jwrite("users.json", userjson)
         self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
@@ -83,7 +83,7 @@ class ChessServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))
 
     if p == "/users":
-     self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
+      self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
