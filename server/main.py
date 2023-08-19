@@ -69,7 +69,8 @@ class ChessServer(BaseHTTPRequestHandler):
     self.end_headers()
 
     if p == "/connect":
-      username = de(query_components["username"])
+      #username = de(query_components["username"])
+      username = query_components["username"]
       userjson = jload("users.json")
       userjson.append({"name": username})
       jwrite("users.json", userjson)
