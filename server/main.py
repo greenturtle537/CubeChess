@@ -86,7 +86,7 @@ class ChessServer(BaseHTTPRequestHandler):
       self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
       
     if p == "/time":
-      print(log_date_time_string())
+      print(self.log_date_time_string())
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
