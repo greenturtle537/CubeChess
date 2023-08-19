@@ -75,12 +75,12 @@ class ChessServer(BaseHTTPRequestHandler):
       #username = de(query_components["username"])
       username = query_components["username"]
       userjson = jload("users.json")
+      res = {"result": 0}
       if not {"name": username} in userjson:
         userjson.append({"name": username})
         jwrite("users.json", userjson)
-        self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
-      else:
-        self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))
+        res["result"] = 1
+      self.wfile.write(bytes(json.dumps(res), "utf-8"))
 
     if p == "/users":
       self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))

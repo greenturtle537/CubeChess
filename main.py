@@ -59,6 +59,17 @@ def LoadSettings():
   global board
   b = json.GetDict(f"game/modData/boards/{data['board']}.board")
   board = Board(b['array'])
+  for y in range(len(b['array'][data['setup']])):
+    for x in range(len(b['array'][data['setup']][y])):
+      pass # interpret pieces
+      pass # interpret pieces
+      pass # interpret pieces
+      pass # interpret pieces
+      pass # interpret pieces
+      pass # interpret pieces
+      pass # interpret pieces
+      pass # interpret pieces
+      pass # interpret pieces
   
   
 
