@@ -61,7 +61,8 @@ def LoadSettings(): pass
 
 
 
-def StartGame(): pass
+def StartGame(): 
+  type.clear()
 
 def GetPlayer1Action(): pass
 
@@ -78,9 +79,9 @@ def ServerProcess2(): pass
 def PrintBoard():
   board = type.t.bold + type.t.rgb(220,220,220) + """
    ╭─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────╮
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
+   │  ██████ │         │         │         │         │         │         │         │
+   │  ██ ███ │         │         │         │         │         │         │         │
+   │  ██████ │         │         │         │         │         │         │         │
    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
    │         │         │         │         │         │         │         │         │
    │         │         │         │         │         │         │         │         │
@@ -113,7 +114,6 @@ def PrintBoard():
 """ + type.t.normal
 
 
-  type.clear()
   type.xyprint(board, 0, 0)
 
   for i in range(8):
@@ -121,8 +121,7 @@ def PrintBoard():
     type.xyprint(type.t.mediumseagreen + 'P', 8+10*i, 7)
     type.xyprint(type.t.indianred + 'RNBQKBNR'[i], 8+10*i, 31)
     type.xyprint(type.t.indianred + 'P', 8+10*i, 27)
-  
-  type.xyinput('',0,0)
+  with type.t.hidden_cursor(): type.xyinput('',0,0)
 
 PrintBoard()
 

@@ -73,7 +73,7 @@ class ChessServer(BaseHTTPRequestHandler):
       userjson = jload("users.json")
       userjson.append({"name": username})
       jwrite("users.json", userjson)
-      self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
+      self.wfile.write(bytes(json.dumps({"success": True}), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
