@@ -4,8 +4,6 @@ import base62
 from urllib.parse import urlparse
 import os
 
-import insta
-
 hostName = "glitchtech.top"
 serverPort = 8
 
