@@ -3,6 +3,7 @@ import json
 import base62
 from urllib.parse import urlparse
 import os
+import time
 
 hostName = "glitchtech.top"
 serverPort = 8
@@ -42,6 +43,7 @@ def get_query(query):
   return dict(zip(keys, values))
 
 
+
 def login(username, password):
   logins = jload("creds.json")
   ret = {"res": 0, "name": "noname"}
@@ -77,6 +79,11 @@ class ChessServer(BaseHTTPRequestHandler):
       userjson = jload("users.json")
       res = {"result": 0}
       if not {"name": username} in userjson:
+        blank = {
+          "name": username, 
+          "keepalive": "", 
+          "activity": ""
+        }
         userjson.append({"name": username})
         jwrite("users.json", userjson)
         res["result"] = 1
@@ -87,6 +94,10 @@ class ChessServer(BaseHTTPRequestHandler):
       
     if p == "/time":
       print(self.log_date_time_string())
+      print(self.date_time_string())
+      print(time.time())
+      
+      
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
