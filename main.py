@@ -57,7 +57,8 @@ def LoadMods():
 def LoadSettings(): 
   data = json.GetDict('game/settings')
   global board
-  board = Board(data['array'])
+  b = json.GetDict(f"game/modData/boards/{data['board']}.board")
+  board = Board(b['array'])
   
   
 
@@ -144,9 +145,9 @@ PrintBoard()
 DrawPieces()
 
 
-while True:
-  GetPlayer1Action()
-  ServerProcess1()
+# while True:
+#   GetPlayer1Action()
+#   ServerProcess1()
   
 
 
