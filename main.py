@@ -116,14 +116,19 @@ def PrintBoard():
 
   type.xyprint(board, 0, 0)
 
-  for i in range(8):
-    type.xyprint(type.t.mediumseagreen + 'RNBQKBNR'[i], 8+10*i, 3)
-    type.xyprint(type.t.mediumseagreen + 'P', 8+10*i, 7)
-    type.xyprint(type.t.indianred + 'RNBQKBNR'[i], 8+10*i, 31)
-    type.xyprint(type.t.indianred + 'P', 8+10*i, 27)
-  with type.t.hidden_cursor(): type.xyinput('',0,0)
+  # for i in range(8):
+  #   type.xyprint(type.t.mediumseagreen + 'RNBQKBNR'[i], 8+10*i, 3)
+  #   type.xyprint(type.t.mediumseagreen + 'P', 8+10*i, 7)
+  #   type.xyprint(type.t.indianred + 'RNBQKBNR'[i], 8+10*i, 31)
+  #   type.xyprint(type.t.indianred + 'P', 8+10*i, 27)
+  # with type.t.hidden_cursor(): type.xyinput('',0,0)
 
-PrintBoard()
+
+def DrawPieces():
+  for piece in pieces:
+    type.xyprint(piece.char, 8+10*piece.pos[0], 3+4*pice.pos[1])
+
+
 
 
 
@@ -131,6 +136,8 @@ PrintBoard()
 
 # gameplay
 StartGame()
+PrintBoard()
+DrawPieces()
 while True:
   GetPlayer1Action()
   ServerProcess1()
