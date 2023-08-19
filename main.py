@@ -61,15 +61,7 @@ def LoadSettings():
   board = Board(b['array'])
   for y in range(len(b['setup'][data['setup']])):
     for x in range(len(b['setup'][data['setup']][y])):
-      pass # interpret pieces
-      pass # interpret pieces
-      pass # interpret pieces
-      pass # interpret pieces
-      pass # interpret pieces
-      pass # interpret pieces
-      pass # interpret pieces
-      pass # interpret pieces
-      pass # interpret pieces
+      piq = b['setup'][data['setup']][y][x]
   
   
 
