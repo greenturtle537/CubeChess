@@ -76,7 +76,7 @@ def ServerProcess2(): pass
 
 
 def PrintBoard():
-  board = type.t.rgb(220,220,220) + """
+  board = type.t.bold + type.t.rgb(220,220,220) + """
    ╭─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────╮
    │         │         │         │         │         │         │         │         │
    │         │         │         │         │         │         │         │         │
@@ -110,7 +110,7 @@ def PrintBoard():
    │         │         │         │         │         │         │         │         │
    │         │         │         │         │         │         │         │         │
    ╰─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────╯
-"""
+""" + type.t.normal
   # board = """
   # ---------------------------------
   # |   |   |   |   |   |   |   |   |
@@ -131,8 +131,15 @@ def PrintBoard():
   # ---------------------------------"""
 
 
-  
+  type.clear()
   type.xyprint(board, 0, 0)
+
+  for i in range(8):
+    type.xyprint(type.t.mediumseagreen + 'RNBQKBNR'[i], 8+10*i, 3)
+    type.xyprint(type.t.mediumseagreen + 'P', 8+10*i, 7)
+    type.xyprint(type.t.indianred + 'RNBQKBNR'[i], 8+10*i, 31)
+    type.xyprint(type.t.indianred + 'P', 8+10*i, 27)
+  
   type.xyinput('',0,0)
 
 PrintBoard()

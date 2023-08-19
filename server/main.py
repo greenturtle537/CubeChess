@@ -72,9 +72,10 @@ class ChessServer(BaseHTTPRequestHandler):
 
     if p == "/connect":
       username = de(query_components["username"])
-      password = de(query_components["password"])
-      output = login(username, password)
-      self.wfile.write(bytes(json.dumps(output), "utf-8"))
+      userjson = jload("users.json")
+      userjson.append({"name": username})
+      jwrite("users.json", userjson)
+      self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])

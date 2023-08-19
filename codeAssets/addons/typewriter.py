@@ -15,7 +15,8 @@ t.on_rgb = t.on_color_rgb
 def format(format: str) -> None: print(format, end='')
 
 
-def clear() -> None: system('cls' if name == 'nt' else 'clear')
+# def clear() -> None: system('cls' if name == 'nt' else 'clear')
+def clear() -> None: print(t.clear)
   
 def clearline(y: int) -> None: 
   with t.location(0, y): print(' '*t.width, end='')
