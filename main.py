@@ -7,10 +7,22 @@ import codeAssets.addons.colorcalc as colorcalc
 Pieces = []
 
 class Board:
-  def __init__(self, validlocations: tuple[tuple]):
-    self.validlocations = validlocations
-    
+  def __init__(self, array):
+    self.validlocations = []
+    for y in range(len(array)):
+      for x in range(len(array[y])):
+        if array[y][x] == 1: self.validlocations.append((x,y))
 
+
+board = Board([ [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1]]
+             )
 
 
 Pieces = []
@@ -32,7 +44,7 @@ class piece:
 
 def ReadMods():
   global dmLines
-  with open('game/.mods','r') as dotmods: 
+  with open('game/mods','r') as dotmods: 
     dmLines = [line.replace('\n','') for line in dotmods.readlines()]; dotmods.close()
   for i in range(len(dmLines)):
     if dmLines[i][0] == 'p': dmLines[i] = 'game/modData/' + dmLines[i] + '.piece'; continue
@@ -41,11 +53,6 @@ def ReadMods():
 
 
 def LoadMods():
-  with open('game/.settings','r') as dotsettings:
-    dsLines = [line.replace('\n','') for line in dotsettings.readlines()]; dotsettings.close()
-  for line in dsLines: 
-    pass
-
   print(type.t.mediumseagreen)
   for line in dmLines:
     try:
@@ -57,8 +64,9 @@ def LoadMods():
     except: print(f"{type.t.red}error loading mod file '{line}'{type.t.white}"); input(type.t.white + 'all mods loaded\n\n\n')
 
 
-def LoadSettings(): pass
-
+def LoadSettings(): 
+  dict = json.GetDict('game/settings')
+  
 
 
 def StartGame(): 
@@ -125,8 +133,8 @@ def PrintBoard():
 
 
 def DrawPieces():
-  for piece in pieces:
-    type.xyprint(piece.char, 8+10*piece.pos[0], 3+4*pice.pos[1])
+  for piece in Pieces:
+    type.xyprint(piece.char, 8+10*piece.pos[0], 3+4*piece.pos[1])
 
 
 
@@ -135,9 +143,14 @@ def DrawPieces():
 
 
 # gameplay
+
+LoadSettings()
+
 StartGame()
 PrintBoard()
 DrawPieces()
+
+
 while True:
   GetPlayer1Action()
   ServerProcess1()
