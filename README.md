@@ -1,9 +1,9 @@
 # CubeChess
 Chess but Cube
-
+It's pretty nifty
 
 
 
 ## install:
-Ensure the python extension "Blessed" is installed
-```pip install blessed```
+Ensure the python extensions are installed
+```pip install blessed pybase62```

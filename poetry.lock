@@ -20,6 +20,14 @@ six = ">=1.9.0"
 wcwidth = ">=0.1.4"
 
 [[package]]
+name = "insta"
+version = "1.0.0"
+description = "A simple printer"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "jinxed"
 version = "1.2.0"
 description = "Jinxed Terminal Library"
@@ -29,6 +37,14 @@ python-versions = "*"
 
 [package.dependencies]
 ansicon = {version = "*", markers = "platform_system == \"Windows\""}
+
+[[package]]
+name = "pybase62"
+version = "1.0.0"
+description = "Python module for base62 encoding"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "six"
@@ -49,11 +65,13 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "0624359226e6392c1c26a4df0034466a6885c3966c06262880e0f0141dd2943f"
+content-hash = "39a924ba75e80ff31a53360ce2d04eb291d5d1c2e96c37cf6220677f7f38471b"
 
 [metadata.files]
 ansicon = []
 blessed = []
+insta = []
 jinxed = []
+pybase62 = []
 six = []
 wcwidth = []
