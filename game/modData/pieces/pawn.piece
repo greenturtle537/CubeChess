@@ -1,0 +1,6 @@
+{
+  "id": "pa",
+  "movePath": [[0,1]],
+  "attackPath": [[-1,1],[1,1]],
+  "specialPath": "None"
+}

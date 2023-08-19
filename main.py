@@ -24,7 +24,9 @@ class piece:
 
   def remove(self): Pieces.remove(self)
 
-
+  def getattacked(self, attackedfrom: tuple[2]): pass
+  def attackAction(self): pass
+  def specialAction(self, tile: tuple[2]): pass
 
 
 
@@ -35,17 +37,24 @@ def ReadMods():
   for i in range(len(dmLines)):
     if dmLines[i][0] == 'p': dmLines[i] = 'game/modData/' + dmLines[i] + '.piece'; continue
     if dmLines[i][0] == 'b': dmLines[i] = 'game/modData/' + dmLines[i] + '.board'; continue
-      
+    if dmLines[i][0] == 'c': pass #needs work hard coded classes
+
 
 def LoadMods():
   with open('game/.settings','r') as dotsettings:
     dsLines = [line.replace('\n','') for line in dotsettings.readlines()]; dotsettings.close()
   for line in dsLines: 
-    match input('match: '):
-      case '1': print(1)
-      case '2': print(2)
-      case _ : print('else statemetn')
+    pass
 
+  print(type.t.mediumseagreen)
+  for line in dmLines:
+    try:
+      if line[0] == 'c': pass #hard coded classes
+      else:
+        with open(line,'r') as modfile:
+          pass
+      print(f"successfully loaded mod file {line}")
+    except: print(f"{type.t.red}error loading mod file '{line}'{type.t.white}"); input(type.t.white)
 
 
 def LoadSettings(): pass
