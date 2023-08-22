@@ -47,7 +47,7 @@ def get_time():
   return datetime.now()
 
 def clean_time(time):
-  return time.strftime("%H:%M:%S.%f")
+  return time.strftime("%H:%M:%S")
 
 
 

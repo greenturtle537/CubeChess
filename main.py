@@ -148,19 +148,27 @@ PrintBoard()
 DrawPieces()
 
 
-# while True:
-#   GetPlayer1Action()
-#   ServerProcess1()
-  
 
 
 
-# class pawn(piece):
-#   def __init__(self):
-#     self.movePath = ((0,1))
-#     self.attackPath = ((-1,1),(1,1))
-#   def onAttacked(self): pass
-#   def Attack(self, tile): pass
+# board = [
+#   [1, 1, 1, 1, 0, 0, 1, 1],
+#   [1, 1, 1, 1, 0, 0, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1]
+# ]
+
+# boardOrig = board.copy()
+
+
+
+# for y in range(len(board)):
+#   for x in range(len(board[y])):
+#     pass
 
 
 
