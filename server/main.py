@@ -44,10 +44,11 @@ def get_query(query):
   return dict(zip(keys, values))
 
 def get_time():
-  return datetime.now()
+  date = datetime.now().strftime("%m:%d:%y:%H:%M:%S:%f")
+  return date
 
 def clean_time(time):
-  return time.strftime("%H:%M:%S")
+  return time[0:17:1]
 
 
 
