@@ -103,7 +103,7 @@ class ChessServer(BaseHTTPRequestHandler):
 
     if p == "/time":
       self.wfile.write(
-        bytes(json.dumps(jload({"result": get_time()})), "utf-8"))
+        bytes(json.dumps({"result": get_time()}), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
