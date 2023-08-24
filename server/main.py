@@ -43,13 +43,14 @@ def get_query(query):
     values.append(pair[1])
   return dict(zip(keys, values))
 
+
 def get_time():
   date = datetime.now().strftime("%m:%d:%y:%H:%M:%S:%f")
   return date
 
+
 def clean_time(time):
   return time[0:17:1]
-
 
 
 def login(username, password):
@@ -87,7 +88,11 @@ class ChessServer(BaseHTTPRequestHandler):
       userjson = jload("users.json")
       res = {"result": 0}
       if not {"name": username} in userjson:
-        blank = {"name": username,"keepalive": get_time(), "activity": "Logged In"}
+        blank = {
+          "name": username,
+          "keepalive": get_time(),
+          "activity": "Logged In"
+        }
         userjson.append(blank)
         jwrite("users.json", userjson)
         res["result"] = 1
@@ -95,11 +100,10 @@ class ChessServer(BaseHTTPRequestHandler):
 
     if p == "/users":
       self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
-      
+
     if p == "/time":
-      print(get_time())
-      print(clean_time(get_time()))
-      
+      self.wfile.write(
+        bytes(json.dumps(jload({"result": get_time()})), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
