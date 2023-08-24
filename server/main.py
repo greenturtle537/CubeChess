@@ -3,7 +3,6 @@ import json
 import base62
 from urllib.parse import urlparse
 import os
-import time
 from datetime import datetime
 
 hostName = "glitchtech.top"
@@ -53,6 +52,18 @@ def clean_time(time):
   return time[0:17:1]
 
 
+#TimeOne larger than TimeTwo please
+def time_dif(time, time2):
+  #08:24:23:19:29:03:032123
+  timeOne = time.split(":")
+  timeTwo = time2.split(":")
+  newTime = ""
+  for i in range(len(timeOne)):
+    newTime += (timeOne[i] - timeTwo[i])
+    if not i + 1 == len(timeOne):
+      newTime += ":"
+
+
 def login(username, password):
   logins = jload("creds.json")
   ret = {"res": 0, "name": "noname"}
@@ -81,7 +92,7 @@ class ChessServer(BaseHTTPRequestHandler):
 
     if p == "/connect":
       # Result 0: Username already in use
-      # Result 1:
+      # Result 1: Connected
 
       #username = de(query_components["username"])
       username = query_components["username"]
@@ -102,8 +113,7 @@ class ChessServer(BaseHTTPRequestHandler):
       self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
 
     if p == "/time":
-      self.wfile.write(
-        bytes(json.dumps({"result": get_time()}), "utf-8"))
+      self.wfile.write(bytes(json.dumps({"result": get_time()}), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
