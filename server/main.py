@@ -62,7 +62,11 @@ def time_dif(time, time2):
     newTime += (timeOne[i] - timeTwo[i])
     if not i + 1 == len(timeOne):
       newTime += ":"
+  return newTime
 
+def count_seconds(time):
+  time = time.split(":")
+  seconds = time[0]
 
 def login(username, password):
   logins = jload("creds.json")
