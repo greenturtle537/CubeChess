@@ -104,10 +104,10 @@ def time_dif(time, time2):
 def count_seconds(time):
   time = time.split(":")
   seconds = time[0]
-
+  return seconds
 
 def cleaner():
-  users = jload(users.json)
+  users = jload("users.json")
   for user in users:
     alive = user["keepalive"]
     dif = time_dif(get_time(), alive)
