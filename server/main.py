@@ -95,7 +95,7 @@ def time_dif(time, time2):
   timeTwo = time2.split(":")
   newTime = ""
   for i in range(len(timeOne)):
-    newTime += (timeOne[i] - timeTwo[i])
+    newTime += str((int(timeOne[i]) - int(timeTwo[i])))
     if not i + 1 == len(timeOne):
       newTime += ":"
   return newTime
@@ -105,6 +105,7 @@ def count_seconds(time):
   time = time.split(":")
   seconds = time[0]
   return seconds
+
 
 def cleaner():
   users = jload("users.json")
