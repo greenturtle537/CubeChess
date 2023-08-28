@@ -101,8 +101,8 @@ def time_dif(time, time2):
     if n > 0:
       newTime += str(n)
     else:
-      newTime += mod[l - i - 1] - abs(n)
-      timeOne[l - i - 1] = int(timeOne[l - i - 1]) - 1
+      newTime += str(mod[l - i - 1] - abs(n))
+      timeOne[l - i - 1] = str((int(timeOne[l - i - 1]) - 1))
     if not i + 1 == len(timeOne):
       newTime += ":"
   return newTime
