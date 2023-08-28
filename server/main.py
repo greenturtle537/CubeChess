@@ -102,11 +102,14 @@ class ChessServer(BaseHTTPRequestHandler):
       username = query_components["username"]
       userjson = jload("users.json")
       res = {"result": 0}
+      # Number activities are hardcoded as follows
+      # 0 = Logged in
+      # Interpret strings as chat room signatures 
       if not {"name": username} in userjson:
         blank = {
           "name": username,
           "keepalive": get_time(),
-          "activity": "Logged In"
+          "activity": "0"
         }
         userjson.append(blank)
         jwrite("users.json", userjson)
