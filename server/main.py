@@ -5,6 +5,39 @@ from urllib.parse import urlparse
 import os
 from datetime import datetime
 
+# I didn't write this
+import threading 
+import time
+
+class RepeatedTimer(object):
+  def __init__(self, interval, function, *args, **kwargs):
+    self._timer = None
+    self.interval = interval
+    self.function = function
+    self.args = args
+    self.kwargs = kwargs
+    self.is_running = False
+    self.next_call = time.time()
+    self.start()
+
+  def _run(self):
+    self.is_running = False
+    self.start()
+    self.function(*self.args, **self.kwargs)
+
+  def start(self):
+    if not self.is_running:
+      self.next_call += self.interval
+      self._timer = threading.Timer(self.next_call - time.time(), self._run)
+      self._timer.start()
+      self.is_running = True
+
+  def stop(self):
+    self._timer.cancel()
+    self.is_running = False
+# End unoriginal code
+
+
 hostName = "glitchtech.top"
 serverPort = 8
 
@@ -52,7 +85,7 @@ def clean_time(time):
   return time[0:17:1]
 
 
-#TimeOne larger than TimeTwo please
+#TimeOne newer than TimeTwo please
 def time_dif(time, time2):
   #08:24:23:19:29:03:032123
   timeOne = time.split(":")
@@ -64,9 +97,20 @@ def time_dif(time, time2):
       newTime += ":"
   return newTime
 
+
 def count_seconds(time):
   time = time.split(":")
   seconds = time[0]
+
+
+def cleaner():
+  users = jload(users.json)
+  for user in users:
+    alive = user["keepalive"]
+    dif = time_dif(get_time(),alive)
+    sec = count_seconds(dif)
+    print(sec)
+    
 
 def login(username, password):
   logins = jload("creds.json")
@@ -122,6 +166,8 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/time":
       self.wfile.write(bytes(json.dumps({"result": get_time()}), "utf-8"))
 
+    if p == "/keepalive": 
+
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
     post_data = self.rfile.read(content_length)
@@ -142,12 +188,18 @@ class ChessServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
   webServer = HTTPServer((hostName, serverPort), ChessServer)
-  print("Server started http://%s:%s" % (hostName, serverPort))
-
+  rt = RepeatedTimer(1, cleaner) # it auto-starts, no need of rt.start()
   try:
-    webServer.serve_forever()
-  except KeyboardInterrupt:
-    pass
+    print("Server started http://%s:%s" % (hostName, serverPort))
+    try:
+      webServer.serve_forever()
+    except KeyboardInterrupt:
+      pass
+  finally:
+    rt.stop()
+ 
+
+  
 
   webServer.server_close()
   print("Server stopped.")
