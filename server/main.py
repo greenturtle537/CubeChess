@@ -6,10 +6,12 @@ import os
 from datetime import datetime
 
 # I didn't write this
-import threading 
+import threading
 import time
 
+
 class RepeatedTimer(object):
+
   def __init__(self, interval, function, *args, **kwargs):
     self._timer = None
     self.interval = interval
@@ -35,8 +37,9 @@ class RepeatedTimer(object):
   def stop(self):
     self._timer.cancel()
     self.is_running = False
-# End unoriginal code
 
+
+# End unoriginal code
 
 hostName = "glitchtech.top"
 serverPort = 8
@@ -107,10 +110,10 @@ def cleaner():
   users = jload(users.json)
   for user in users:
     alive = user["keepalive"]
-    dif = time_dif(get_time(),alive)
+    dif = time_dif(get_time(), alive)
     sec = count_seconds(dif)
     print(sec)
-    
+
 
 def login(username, password):
   logins = jload("creds.json")
@@ -148,13 +151,9 @@ class ChessServer(BaseHTTPRequestHandler):
       res = {"result": 0}
       # Number activities are hardcoded as follows
       # 0 = Logged in
-      # Interpret strings as chat room signatures 
+      # Interpret strings as chat room signatures
       if not {"name": username} in userjson:
-        blank = {
-          "name": username,
-          "keepalive": get_time(),
-          "activity": "0"
-        }
+        blank = {"name": username, "keepalive": get_time(), "activity": "0"}
         userjson.append(blank)
         jwrite("users.json", userjson)
         res["result"] = 1
@@ -166,7 +165,8 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/time":
       self.wfile.write(bytes(json.dumps({"result": get_time()}), "utf-8"))
 
-    if p == "/keepalive": 
+    if p == "/keepalive":
+      self.wfile.write(bytes(json.dumps({"result": ":c"}), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
@@ -188,7 +188,7 @@ class ChessServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
   webServer = HTTPServer((hostName, serverPort), ChessServer)
-  rt = RepeatedTimer(1, cleaner) # it auto-starts, no need of rt.start()
+  rt = RepeatedTimer(1, cleaner)  # it auto-starts, no need of rt.start()
   try:
     print("Server started http://%s:%s" % (hostName, serverPort))
     try:
@@ -197,9 +197,6 @@ if __name__ == "__main__":
       pass
   finally:
     rt.stop()
- 
-
-  
 
   webServer.server_close()
   print("Server stopped.")
