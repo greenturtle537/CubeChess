@@ -99,7 +99,7 @@ def time_dif(time, time2):
   for i in range(l):
     n = int(timeOne[l - i - 1]) - int(timeTwo[l - i - 1])
     if n > 0:
-      newTime = str(n) + newTime
+      newTime = (str(n) + newTime).zfill(2)
     else:
       newTime += str(mod[l - i - 1] - abs(n))
       timeOne[l - i - 1] = str((int(timeOne[l - i - 1]) - 1))
@@ -120,7 +120,9 @@ def cleaner():
     alive = user["keepalive"]
     dif = time_dif(get_time(), alive)
     sec = count_seconds(dif)
+    print(get_time)
     print(dif)
+    print(sec)
 
 
 def login(username, password):
