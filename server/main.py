@@ -93,16 +93,16 @@ def time_dif(time, time2):
   #08:24:23:19:29:03:032123
   timeOne = time.split(":")
   timeTwo = time2.split(":")
-  mod = [12,30,99,24,60,60,1000000]
+  mod = [12, 30, 99, 24, 60, 60, 1000000]
   newTime = ""
   l = len(timeOne)
   for i in range(l):
-    n = int(timeOne[l-i-1]) - int(timeTwo[l-i-1])
+    n = int(timeOne[l - i - 1]) - int(timeTwo[l - i - 1])
     if n > 0:
       newTime += str(n)
-    else
-      newTime += mod[l-i-1] - abs(n)
-      timeOne[l-i-1] = int(timeOne[l-i-1]) - 1
+    else:
+      newTime += mod[l - i - 1] - abs(n)
+      timeOne[l - i - 1] = int(timeOne[l - i - 1]) - 1
     if not i + 1 == len(timeOne):
       newTime += ":"
   return newTime
