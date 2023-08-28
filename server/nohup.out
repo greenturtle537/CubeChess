@@ -1,0 +1,4 @@
+  File "main.py", line 91
+    def do_POST(self):
+      ^
+SyntaxError: invalid syntax

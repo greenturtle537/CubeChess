@@ -113,7 +113,7 @@ def cleaner():
     alive = user["keepalive"]
     dif = time_dif(get_time(), alive)
     sec = count_seconds(dif)
-    print(sec)
+    print(dif)
 
 
 def login(username, password):
