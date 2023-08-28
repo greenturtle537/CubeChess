@@ -99,12 +99,12 @@ def time_dif(time, time2):
   for i in range(l):
     n = int(timeOne[l - i - 1]) - int(timeTwo[l - i - 1])
     if n > 0:
-      newTime += str(n)
+      newTime = str(n) + newTime
     else:
       newTime += str(mod[l - i - 1] - abs(n))
       timeOne[l - i - 1] = str((int(timeOne[l - i - 1]) - 1))
     if not i + 1 == len(timeOne):
-      newTime += ":"
+      newTime = ":" + newTime
   return newTime
 
 
