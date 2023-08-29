@@ -98,7 +98,7 @@ def time_dif(time, time2):
   l = len(timeOne)
   for i in range(l):
     n = int(timeOne[l - i - 1]) - int(timeTwo[l - i - 1])
-    if n > 0:
+    if n >= 0:
       newTime = format(n, "02") + newTime
     else:
       newTime = format(mod[l - i - 1] - abs(n), "02") + newTime
