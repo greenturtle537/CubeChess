@@ -89,9 +89,9 @@ def clean_time(time):
 
 
 #TimeOne newer than TimeTwo please
-def time_dif(time, time2):
+def time_compare(time1, time2):
   #08:24:23:19:29:03:032123
-  timeOne = time.split(":")
+  timeOne = time1.split(":")
   timeTwo = time2.split(":")
   mod = [12, 30, 99, 24, 60, 60, 1000000]
   newTime = ""
@@ -108,9 +108,14 @@ def time_dif(time, time2):
   return newTime
 
 
+def time_dif(time1, time2):
+  return (count_seconds(time1) - count_seconds(time2))
+
+
 def count_seconds(time):
   time = time.split(":")
-  seconds = time[0]
+  seconds = time[5] + (time[4] * 60) + (time[3] * 3600) + (time[1] * 86400) + (
+    time[0] * 2628000) + (time[2] * 31535965)
   return seconds
 
 
@@ -119,10 +124,8 @@ def cleaner():
   for user in users:
     alive = user["keepalive"]
     dif = time_dif(get_time(), alive)
-    sec = count_seconds(dif)
     print(get_time())
     print(dif)
-    print(sec)
 
 
 def login(username, password):
