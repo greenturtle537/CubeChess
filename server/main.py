@@ -114,9 +114,9 @@ def time_dif(time1, time2):
 
 def count_seconds(time):
   time = time.split(":")
-  seconds = time[5] + (time[4] * 60) + (time[3] * 3600) + (time[1] * 86400) + (
-    time[0] * 2628000) + (time[2] * 31535965)
-  return seconds
+  seconds = int(time[5]) + int((time[4] * 60)) + int((time[3] * 3600)) + int(
+    (time[1] * 86400)) + int((time[0] * 2628000)) + int((time[2] * 31535965))
+  return int(seconds)
 
 
 def cleaner():
