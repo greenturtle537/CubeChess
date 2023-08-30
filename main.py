@@ -5,17 +5,6 @@ import codeAssets.addons.colorcalc as colorcalc
 
 # global main game vars
 Pieces = []
-
-class Board:
-  def __init__(self, array):
-    self.validlocations = []
-    for y in range(len(array)):
-      for x in range(len(array[y])):
-        if array[y][x] == 1: self.validlocations.append((x,y))
-
-
-
-Pieces = []
 class piece:
   def __init__(self, movePaths: tuple[tuple[2]], attackPaths: tuple[tuple[2]], id: str):
     Pieces.append(self)
@@ -55,14 +44,29 @@ def LoadMods():
 
 
 def LoadSettings(): 
-  data = json.GetDict('game/settings')
-  global board
-  b = json.GetDict(f"game/modData/boards/{data['board']}.board")
-  board = Board(b['array'])
+  data = json.GetDict('game/settings') # gets the settings file
+  global board, cornerBoard # global some variables for later use in other functions
+  b = json.GetDict(f"game/modData/boards/{data['board']}.board") # loads the board file
+  board = b['array'] # loads the array from the .board file
   for y in range(len(b['setup'][data['setup']])):
     for x in range(len(b['setup'][data['setup']][y])):
       piq = b['setup'][data['setup']][y][x]
-  
+
+  # make the cornerboard - 1 larger in width and height than board cause corner-count math
+  cornerBoard = [[0b0000 for x in range(len(board[y])+1)] for y in range(len(board))]
+  cornerBoard.append(cornerBoard[-1].copy())
+
+  # fill the cornerboards data with 4bit numbers corresponding to adjacent tile existences
+  for y in range(len(cornerBoard)):
+    for x in range(len(cornerBoard[y])):
+      if y-1 in range(len(board)) and x-1 in range(len(board[y-1])):
+        if board[y-1][x-1] == 1: cornerBoard[y][x] += 0b1000
+      if y in range(len(board)) and x-1 in range(len(board[y])):
+        if board[y][x-1] == 1: cornerBoard[y][x] += 0b0100
+      if y in range(len(board)) and x in range(len(board[y])):
+        if board[y][x] == 1: cornerBoard[y][x] += 0b0010
+      if y-1 in range(len(board)) and x in range(len(board[y-1])):
+        if board[y-1][x] == 1: cornerBoard[y][x] += 0b0001
 
 
 # a function to draw pieces
@@ -73,42 +77,7 @@ def DrawPieces():
 
 
 
-board = [
-  [1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 0, 0, 0, 1],
-  [1, 1, 1, 1, 0, 0, 0, 1],
-  [1, 1, 0, 1, 1, 0, 0, 1],
-  [1, 1, 0, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1]
-]
 
-# board = [
-#   [1, 0, 0, 0, 0, 0, 1, 0],
-#   [0, 1, 1, 1, 0, 0, 1, 0],
-#   [0, 1, 1, 1, 1, 0, 0, 0],
-#   [0, 1, 0, 0, 1, 1, 0, 0],
-#   [0, 1, 0, 1, 1, 1, 0, 0],
-#   [0, 1, 0, 0, 1, 1, 0, 0],
-#   [0, 1, 1, 1, 1, 0, 0, 0],
-#   [0, 1, 0, 0, 0, 0, 0, 1]
-# ]
-
-cornerBoard = [[0b0000 for x in range(len(board[y])+1)] for y in range(len(board))]
-cornerBoard.append(cornerBoard[-1].copy())
-
-
-for y in range(len(cornerBoard)):
-  for x in range(len(cornerBoard[y])):
-      if y-1 in range(len(board)) and x-1 in range(len(board[y-1])):
-        if board[y-1][x-1] == 1: cornerBoard[y][x] += 0b1000
-      if y in range(len(board)) and x-1 in range(len(board[y])):
-        if board[y][x-1] == 1: cornerBoard[y][x] += 0b0100
-      if y in range(len(board)) and x in range(len(board[y])):
-        if board[y][x] == 1: cornerBoard[y][x] += 0b0010
-      if y-1 in range(len(board)) and x in range(len(board[y-1])):
-        if board[y-1][x] == 1: cornerBoard[y][x] += 0b0001
 
 
 def PrintBoard():
@@ -121,7 +90,8 @@ def PrintBoard():
     type.xyprint(' ───────── ',x,y+4)
 
   # sets the printing format to the board grayish color
-  print(type.t.rgb(200,200,200))
+  print(type.t.rgb(180,180,180))
+   
   # prints the lines
   for y in range(len(board)):
     for x in range(len(board[y])):
@@ -133,16 +103,10 @@ def PrintBoard():
   # returns printing format to normal
   print(type.t.normal)
 
-  TeamColor1 = type.t.rgb(220,50,50)
-  TeamColor2 = type.t.rgb(50,220,50)
-  BoardColor1 = type.t.bold+type.t.rgb(125, 110, 0)
-  BoardColor2 = type.t.rgb(185, 160, 0)
 
-   
-  from random import randint as ri
-  
-  for x in range(8):
-    for y in range(8):
+  # board styling for showing what's available space and what's a gap
+  for y in range(len(board)):
+    for x in range(len(board[y])):
       if board[y][x] == 1: 
         # # style 1
         # type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭   ╮', 5+10*x, 2+4*y); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰   ╯', 5+10*x, 4+4*y)
@@ -156,34 +120,78 @@ def PrintBoard():
         type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*x, 2+4*y); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*x, 4+4*y)
 
 
+
+
+
+
+
+
+def SelectBoardSpace():
+  selected1 = None
+  with type.t.hidden_cursor():
+   while True:
+    x, y = boardSelection[0], boardSelection[1]
+     # draw where the cursor is
+     
+    type.xyprint(f'{type.t.rgb(0,255,255)}╭ ╮', 6+10*x, 2+4*y); type.xyprint(f'{type.t.rgb(0,255,255)}╰ ╯', 6+10*x, 4+4*y)
+
+    # get a keypress
+    inkey = type.RestrictedInkey(['w', 'a', 's', 'd', 'e', ' ','\n'])
+     
+    # draw over where the cursor was
+    try: 
+      if board[y][x] == 1: type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*x, 2+4*y); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*x, 4+4*y)
+      else: type.xyprint(f'   ', 6+10*x, 2+4*y); type.xyprint(f'   ', 6+10*x, 4+4*y)
+    except: type.xyprint(f'   ', 6+10*x, 2+4*y); type.xyprint(f'   ', 6+10*x, 4+4*y)
+
+    # draw where selected1 is (if it isn't None)
+    if selected1 != None: type.xyprint(f'{type.t.rgb(0,180,255)}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); type.xyprint(f'{type.t.rgb(0,180,255)}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
+
+    # interact based on keypress
+    if inkey == 'w' and y > 0: boardSelection[1] -= 1
+    if inkey == 's' and y < len(board)-1: boardSelection[1] += 1
+    if inkey == 'a' and x > 0: boardSelection[0] -= 1
+    if inkey == 'd' and x < 7: boardSelection[0] += 1
+
+    if inkey in ['e',' ','\n']: 
+      if selected1 == None: 
+        if board[y][x] == 1: selected1 = (x,y)
+      elif board[y][x] == 1: 
+        type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
+        return [selected1, (x,y)]
         
-        if not ri(0,3): type.xyprint(f'{TeamColor1 if ri(0,1) else TeamColor2}R', 7+10*x, 3+4*y)
+        
+    
 
 
 
 
 
 
+def InitFunctionRecallVars():
+  global boardSelection
+  for y in range(len(board)):
+    for x in range(len(board[y])):
+      if board[y][x] == 1: boardSelection = [x,y]; break
+    else: break
+  
 
-
-
-
-
-
-
-
-
+  global TeamColor1, TeamColor2, BoardColor1, BoardColor2
+  TeamColor1 = type.t.rgb(220,50,50)
+  TeamColor2 = type.t.rgb(50,220,50)
+  BoardColor1 = type.t.bold+type.t.rgb(125, 110, 0)
+  BoardColor2 = type.t.rgb(185, 160, 0)
 
 
 
 # ##### gameplay
 
-# LoadSettings()
+LoadSettings()
+InitFunctionRecallVars()
 
-# StartGame()
-PrintBoard()
-# DrawPieces()
-
+with type.t.hidden_cursor(), type.t.cbreak():
+ PrintBoard()
+ while True: type.xyprint(SelectBoardSpace(), 0, 40)
 
 
 type.xyinput('>>> ', 0, type.t.height-1)
