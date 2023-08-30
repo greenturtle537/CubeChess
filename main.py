@@ -99,15 +99,15 @@ def PrintBoard():
    │         │         │         │         │         │         │         │         │
    │         │         │         │         │         │         │         │         │
    │         │         │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
+   ├─────────┼─────────┼─────────┼─────────┴─────────┼─────────┼─────────┼─────────┤
+   │         │         │         │                   │         │         │         │
+   │         │         │         │                   │         │         │         │
+   │         │         │         │                   │         │         │         │
+   ├─────────┼─────────┼─────────┤                   ├─────────┼─────────┼─────────┤
+   │         │         │         │                   │         │         │         │
+   │         │         │         │                   │         │         │         │
+   │         │         │         │                   │         │         │         │
+   ├─────────┼─────────┼─────────┼─────────┬─────────┼─────────┼─────────┼─────────┤
    │         │         │         │         │         │         │         │         │
    │         │         │         │         │         │         │         │         │
    │         │         │         │         │         │         │         │         │
@@ -149,32 +149,98 @@ def DrawPieces():
 
 
 
+# board = [
+#   [1, 1, 1, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 0, 0, 0, 1],
+#   [1, 1, 1, 1, 0, 0, 0, 1],
+#   [1, 1, 0, 1, 1, 0, 0, 1],
+#   [1, 1, 0, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1],
+#   [1, 1, 1, 1, 1, 1, 1, 1]
+# ]
+
 board = [
-  [1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 0, 0, 0, 1],
-  [1, 1, 1, 1, 0, 0, 0, 1],
-  [1, 1, 0, 1, 1, 0, 0, 1],
-  [1, 1, 0, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1]
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 0, 0, 0],
+  [0, 1, 0, 0, 1, 1, 0, 0],
+  [0, 1, 0, 0, 1, 1, 0, 0],
+  [0, 1, 0, 0, 1, 1, 0, 0],
+  [0, 1, 1, 1, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
+cornerBoard = [[0b0000 for x in range(len(board[y])+1)] for y in range(len(board))]
+cornerBoard.append(cornerBoard[-1].copy())
+
+
+for y in range(len(cornerBoard)):
+  for x in range(len(cornerBoard[y])):
+    # type.clear()
+    # if y-1 in range(len(board)) and x+1 in range(len(board[y])): 
+    #   if board[y-1][x+1] == 1: type.xyprint(f'found up-right at {(x,y)}', 0, 35); cornerBoard[y][x] += 0b0001
+    # if y+1 in range(len(board)) and x+1 in range(len(board[y])): 
+    #   if board[y+1][x+1] == 1: type.xyprint(f'found down-right at {(x,y)}', 0, 36);cornerBoard[y][x] += 0b0010
+    # if y+1 in range(len(board)) and x-1 in range(len(board[y])): 
+    #   if board[y+1][x-1] == 1: type.xyprint(f'found up-left at {(x,y)}', 0, 37);cornerBoard[y][x] += 0b0100
+    # if y-1 in range(len(board)) and x-1 in range(len(board[y])): 
+    #   if board[y-1][x-1] == 1: type.xyprint(f'found down-left at {(x,y)}', 0, 38);cornerBoard[y][x] += 0b1000
+    # type.xyinput('',0,0)
+    # try:
+      if y-1 in range(len(board)) and x-1 in range(len(board[y-1])):
+        if board[y-1][x-1] == 1: cornerBoard[y][x] += 0b1000
+      if y in range(len(board)) and x-1 in range(len(board[y])):
+        if board[y][x-1] == 1: cornerBoard[y][x] += 0b0100
+      if y in range(len(board)) and x in range(len(board[y])):
+        if board[y][x] == 1: cornerBoard[y][x] += 0b0010
+      if y-1 in range(len(board)) and x in range(len(board[y-1])):
+        if board[y-1][x] == 1: cornerBoard[y][x] += 0b0001
+    # except: input(str(y))
+
+
+def PrintDynBoard(array):
+  corners = ' ╰╭├╮┼┬┼╯┴┼┼┤┼┼┼'
+  corners = ' ╰╭├╮┼┬┼╯┴┼┼┤┼┼┼'
+  # print cell func to print single cell at a time, just for testing getting stuff in correct positions
+  def PrintCell(x, y):
+    type.xyprint(' ───────── ',x,y)
+    for i in range(1,4): type.xyprint('│         │',x,y+i)
+    type.xyprint(' ───────── ',x,y+4)
+
+  for y in range(len(board)):
+    for x in range(len(board[y])):
+      if board[y][x] == 1: PrintCell(10*x, 4*y)
+
+  print(type.t.orange)
+  for y in range(len(cornerBoard)):
+    for x in range(len(cornerBoard[y])): 
+      if cornerBoard[y][x] > 0: 
+        type.xyprint(corners[cornerBoard[y][x]], 10*x, 4*y)
+        type.xyprint(f'"{bin(cornerBoard[y][x])}"            ', 0, 40)
+        type.xyinput(f'{(x,y)} ', 0, 41)
+
+  # for y in range(len(array)):
+  #   for x in range(len(array[y])):
+      
 
 
 
 
 
+PrintDynBoard(board)
+type.xyinput('>>> ', 0, 40)
 
 
 
-##### gameplay
 
-LoadSettings()
+# ##### gameplay
 
-StartGame()
-PrintBoard()
-DrawPieces()
+# LoadSettings()
+
+# StartGame()
+# PrintBoard()
+# DrawPieces()
 
 
 
