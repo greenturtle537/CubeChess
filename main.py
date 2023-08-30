@@ -63,82 +63,6 @@ def LoadSettings():
     for x in range(len(b['setup'][data['setup']][y])):
       piq = b['setup'][data['setup']][y][x]
   
-  
-
-
-def StartGame(): 
-  type.clear()
-
-def GetPlayer1Action(): pass
-
-def GetPlayer2Action(): pass
-
-def ServerProcess1(): pass
-def ServerProcess2(): pass
-
-# ReadMods()
-# LoadMods()
-# LoadSettings()
-
-
-def PrintBoard():
-  TeamColor1 = type.t.rgb(220,50,50)
-  TeamColor2 = type.t.rgb(50,220,50)
-  BoardColor1 = type.t.rgb(155, 130, 0)
-  BoardColor2 = type.t.rgb(155, 130, 0)
-  board = type.t.rgb(200,200,200) + """
-   ╭─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────╮
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┴─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │                   │         │         │         │
-   │         │         │         │                   │         │         │         │
-   │         │         │         │                   │         │         │         │
-   ├─────────┼─────────┼─────────┤                   ├─────────┼─────────┼─────────┤
-   │         │         │         │                   │         │         │         │
-   │         │         │         │                   │         │         │         │
-   │         │         │         │                   │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┬─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   │         │         │         │         │         │         │         │         │
-   ╰─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────╯
-""" + type.t.normal
-
-  
-  # prints the board multi-line string
-  type.xyprint(board, 0, 0)
-
-
-  # # prints the square character at each valid piece location
-  # for x in range(8):
-  #   for y in range(8):
-  #     type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}⬞', 8+10*x, 3+4*y)
-
-  # for i in range(8):
-  #   type.xyprint(TeamColor1 + 'RNBQKBNR'[i], 8+10*i, 3)
-  #   type.xyprint(TeamColor1 + 'P', 8+10*i, 7)
-  #   type.xyprint(TeamColor2 + 'RNBQKBNR'[i], 8+10*i, 31)
-  #   type.xyprint(TeamColor2 + 'P', 8+10*i, 27)
-  # with type.t.hidden_cursor(): type.xyinput('',0,0)
-
 
 
 # a function to draw pieces
@@ -149,27 +73,27 @@ def DrawPieces():
 
 
 
-# board = [
-#   [1, 1, 1, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 0, 0, 0, 1],
-#   [1, 1, 1, 1, 0, 0, 0, 1],
-#   [1, 1, 0, 1, 1, 0, 0, 1],
-#   [1, 1, 0, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1]
-# ]
-
 board = [
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 1, 1, 1, 0, 0, 0, 0],
-  [0, 1, 1, 1, 1, 0, 0, 0],
-  [0, 1, 0, 0, 1, 1, 0, 0],
-  [0, 1, 0, 0, 1, 1, 0, 0],
-  [0, 1, 0, 0, 1, 1, 0, 0],
-  [0, 1, 1, 1, 1, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0]
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 0, 0, 0, 1],
+  [1, 1, 1, 1, 0, 0, 0, 1],
+  [1, 1, 0, 1, 1, 0, 0, 1],
+  [1, 1, 0, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1]
 ]
+
+# board = [
+#   [1, 0, 0, 0, 0, 0, 1, 0],
+#   [0, 1, 1, 1, 0, 0, 1, 0],
+#   [0, 1, 1, 1, 1, 0, 0, 0],
+#   [0, 1, 0, 0, 1, 1, 0, 0],
+#   [0, 1, 0, 1, 1, 1, 0, 0],
+#   [0, 1, 0, 0, 1, 1, 0, 0],
+#   [0, 1, 1, 1, 1, 0, 0, 0],
+#   [0, 1, 0, 0, 0, 0, 0, 1]
+# ]
 
 cornerBoard = [[0b0000 for x in range(len(board[y])+1)] for y in range(len(board))]
 cornerBoard.append(cornerBoard[-1].copy())
@@ -177,17 +101,6 @@ cornerBoard.append(cornerBoard[-1].copy())
 
 for y in range(len(cornerBoard)):
   for x in range(len(cornerBoard[y])):
-    # type.clear()
-    # if y-1 in range(len(board)) and x+1 in range(len(board[y])): 
-    #   if board[y-1][x+1] == 1: type.xyprint(f'found up-right at {(x,y)}', 0, 35); cornerBoard[y][x] += 0b0001
-    # if y+1 in range(len(board)) and x+1 in range(len(board[y])): 
-    #   if board[y+1][x+1] == 1: type.xyprint(f'found down-right at {(x,y)}', 0, 36);cornerBoard[y][x] += 0b0010
-    # if y+1 in range(len(board)) and x-1 in range(len(board[y])): 
-    #   if board[y+1][x-1] == 1: type.xyprint(f'found up-left at {(x,y)}', 0, 37);cornerBoard[y][x] += 0b0100
-    # if y-1 in range(len(board)) and x-1 in range(len(board[y])): 
-    #   if board[y-1][x-1] == 1: type.xyprint(f'found down-left at {(x,y)}', 0, 38);cornerBoard[y][x] += 0b1000
-    # type.xyinput('',0,0)
-    # try:
       if y-1 in range(len(board)) and x-1 in range(len(board[y-1])):
         if board[y-1][x-1] == 1: cornerBoard[y][x] += 0b1000
       if y in range(len(board)) and x-1 in range(len(board[y])):
@@ -196,11 +109,10 @@ for y in range(len(cornerBoard)):
         if board[y][x] == 1: cornerBoard[y][x] += 0b0010
       if y-1 in range(len(board)) and x in range(len(board[y-1])):
         if board[y-1][x] == 1: cornerBoard[y][x] += 0b0001
-    # except: input(str(y))
 
 
-def PrintDynBoard(array):
-  corners = ' ╰╭├╮┼┬┼╯┴┼┼┤┼┼┼'
+def PrintBoard():
+ with type.t.hidden_cursor():
   corners = ' ╰╭├╮┼┬┼╯┴┼┼┤┼┼┼'
   # print cell func to print single cell at a time, just for testing getting stuff in correct positions
   def PrintCell(x, y):
@@ -208,28 +120,58 @@ def PrintDynBoard(array):
     for i in range(1,4): type.xyprint('│         │',x,y+i)
     type.xyprint(' ───────── ',x,y+4)
 
+  # sets the printing format to the board grayish color
+  print(type.t.rgb(200,200,200))
+  # prints the lines
   for y in range(len(board)):
     for x in range(len(board[y])):
-      if board[y][x] == 1: PrintCell(10*x, 4*y)
-
-  print(type.t.orange)
+      if board[y][x] == 1: PrintCell(2+10*x, 1+4*y)
+  # prints the corners
   for y in range(len(cornerBoard)):
     for x in range(len(cornerBoard[y])): 
-      if cornerBoard[y][x] > 0: 
-        type.xyprint(corners[cornerBoard[y][x]], 10*x, 4*y)
-        type.xyprint(f'"{bin(cornerBoard[y][x])}"            ', 0, 40)
-        type.xyinput(f'{(x,y)} ', 0, 41)
+      if cornerBoard[y][x] > 0: type.xyprint(corners[cornerBoard[y][x]], 2+10*x, 1+4*y)
+  # returns printing format to normal
+  print(type.t.normal)
 
-  # for y in range(len(array)):
-  #   for x in range(len(array[y])):
-      
+  TeamColor1 = type.t.rgb(220,50,50)
+  TeamColor2 = type.t.rgb(50,220,50)
+  BoardColor1 = type.t.bold+type.t.rgb(125, 110, 0)
+  BoardColor2 = type.t.rgb(185, 160, 0)
+
+   
+  from random import randint as ri
+  
+  for x in range(8):
+    for y in range(8):
+      if board[y][x] == 1: 
+        # # style 1
+        # type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭   ╮', 5+10*x, 2+4*y); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰   ╯', 5+10*x, 4+4*y)
+        # # style 2
+        # type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭     ╮', 4+10*x, 2+4*y); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰     ╯', 4+10*x, 4+4*y)
+        # # style 3
+        # type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}◜   ◝', 5+10*x, 2+4*y); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}◟   ◞', 5+10*x, 4+4*y)
+        # style 4
+        # type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}◜     ◝', 4+10*x, 2+4*y); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}◟     ◞', 4+10*x, 4+4*y)
+        # # style 5
+        type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*x, 2+4*y); type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*x, 4+4*y)
+
+
+        
+        if not ri(0,3): type.xyprint(f'{TeamColor1 if ri(0,1) else TeamColor2}R', 7+10*x, 3+4*y)
 
 
 
 
 
-PrintDynBoard(board)
-type.xyinput('>>> ', 0, 40)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -239,8 +181,9 @@ type.xyinput('>>> ', 0, 40)
 # LoadSettings()
 
 # StartGame()
-# PrintBoard()
+PrintBoard()
 # DrawPieces()
 
 
 
+type.xyinput('>>> ', 0, type.t.height-1)
