@@ -82,7 +82,11 @@ def ServerProcess2(): pass
 
 
 def PrintBoard():
-  board = type.t.bold + type.t.rgb(220,220,220) + """
+  TeamColor1 = type.t.rgb(220,50,50)
+  TeamColor2 = type.t.rgb(50,220,50)
+  BoardColor1 = type.t.rgb(155, 130, 0)
+  BoardColor2 = type.t.rgb(155, 130, 0)
+  board = type.t.rgb(200,200,200) + """
    ╭─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────╮
    │         │         │         │         │         │         │         │         │
    │         │         │         │         │         │         │         │         │
@@ -118,17 +122,26 @@ def PrintBoard():
    ╰─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────╯
 """ + type.t.normal
 
-
+  
+  # prints the board multi-line string
   type.xyprint(board, 0, 0)
 
+
+  # # prints the square character at each valid piece location
+  # for x in range(8):
+  #   for y in range(8):
+  #     type.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}⬞', 8+10*x, 3+4*y)
+
   # for i in range(8):
-  #   type.xyprint(type.t.mediumseagreen + 'RNBQKBNR'[i], 8+10*i, 3)
-  #   type.xyprint(type.t.mediumseagreen + 'P', 8+10*i, 7)
-  #   type.xyprint(type.t.indianred + 'RNBQKBNR'[i], 8+10*i, 31)
-  #   type.xyprint(type.t.indianred + 'P', 8+10*i, 27)
+  #   type.xyprint(TeamColor1 + 'RNBQKBNR'[i], 8+10*i, 3)
+  #   type.xyprint(TeamColor1 + 'P', 8+10*i, 7)
+  #   type.xyprint(TeamColor2 + 'RNBQKBNR'[i], 8+10*i, 31)
+  #   type.xyprint(TeamColor2 + 'P', 8+10*i, 27)
   # with type.t.hidden_cursor(): type.xyinput('',0,0)
 
 
+
+# a function to draw pieces
 def DrawPieces():
   for piece in Pieces:
     type.xyprint(piece.char, 8+10*piece.pos[0], 3+4*piece.pos[1])
@@ -136,41 +149,32 @@ def DrawPieces():
 
 
 
+board = [
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 0, 0, 0, 1],
+  [1, 1, 1, 1, 0, 0, 0, 1],
+  [1, 1, 0, 1, 1, 0, 0, 1],
+  [1, 1, 0, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1]
+]
 
 
 
-# gameplay
+
+
+
+
+
+
+##### gameplay
 
 LoadSettings()
 
 StartGame()
 PrintBoard()
 DrawPieces()
-
-
-
-
-
-# board = [
-#   [1, 1, 1, 1, 0, 0, 1, 1],
-#   [1, 1, 1, 1, 0, 0, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1],
-#   [1, 1, 1, 1, 1, 1, 1, 1]
-# ]
-
-# boardOrig = board.copy()
-
-
-
-# for y in range(len(board)):
-#   for x in range(len(board[y])):
-#     pass
-
-
 
 
 
