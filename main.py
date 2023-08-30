@@ -6,18 +6,15 @@ import codeAssets.addons.colorcalc as colorcalc
 # global main game vars
 Pieces = []
 class piece:
-  def __init__(self, movePaths: tuple[tuple[2]], attackPaths: tuple[tuple[2]], id: str):
+  def __init__(self, x, y, data, color):
     Pieces.append(self)
-    self.movePath = ()
-    self.attackPath = ()
-    self.id = ()
-    self.coords = ()
-
-  def remove(self): Pieces.remove(self)
-
-  def getattacked(self, attackedfrom: tuple[2]): pass
-  def attackAction(self): pass
-  def specialAction(self, tile: tuple[2]): pass
+    self.attackPath = data.attackPath
+    self.movePath = data.movePath
+    self.pawnPromote = data.pawnPromote
+    self.canJumpPieces = data.canJumpPieces
+    self.canJumpEmpty = data.canJumpEmpty
+    self.pos = [x, y]
+    self.color = 0 or 1
 
 
 
