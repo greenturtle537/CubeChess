@@ -11,6 +11,7 @@ import time
 
 timestd = "%m:%d:%y:%H:%M:%S:%f"
 
+
 class RepeatedTimer(object):
 
   def __init__(self, interval, function, *args, **kwargs):
@@ -80,29 +81,29 @@ def get_query(query):
   return dict(zip(keys, values))
 
 
+def time2string(time):
+  return time.strftime(timestd)
+
+
 def get_time():
-  date = datetime.now().strftime(timestd)
-  return date
+  return datetime.now()
 
 
 def clean_time(time):
   return time[0:17:1]
-  # open the chat tab
-  # open the chat tab
-  # open the chat tab
-  # open the chat tab
-  # open the chat tab
-  # open the chat tab
-  # open the chat tab
+
+
+def string2time(string):
+  return time.strptime(string, timestd)
+
 
 def cleaner():
   users = jload("users.json")
   for user in users:
     alive = user["keepalive"]
-    
-    #dif = time_dif(get_time(), alive)
-    #print(get_time())
-    #print(dif)
+    dif = get_time() - string2time(alive)
+    print(time2string(get_time()))
+    print(dif.count_seconds())
 
 
 def login(username, password):

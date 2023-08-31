@@ -207,18 +207,28 @@ def CheckDirection(pOld, pNew):
 
 
 def GetPieceMove():
-  for i in range(3): 
+  i = 0
+  while True:
+    i += 1
     selection = SelectBoardSpace()
     ttype.xyprint('              ', 0, 35)
 
     if selection[0] != selection[1]:
       if PieceAt(selection[0][0], selection[0][1])[0]:
         piece = PieceAt(selection[0][0], selection[0][1])[1]
-        # check if the move is valid in attack path and there is a target
-        if (CheckDirection(selection[0], selection[1]) in piece.attackPath or (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1]) in piece.attackPath) and PieceAt(selection[1][0], selection[1][1])[0]: PieceAt(selection[1][0], selection[1][1])[1].remove(); piece.eraseSelf(); piece.move(selection[1]); piece.drawSelf()
-        # check if move is valid in move path and there is no target
-        elif (CheckDirection(selection[0], selection[1]) in piece.movePath or (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1]) in piece.movePath) and (not PieceAt(selection[1][0], selection[1][1])[0]): piece.eraseSelf(); piece.move(selection[1]); piece.drawSelf()
-    ttype.xyprint(i, 15, 40)
+        direction = (CheckDirection(selection[0], selection[1]))
+        vector = (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1])
+        piece.erase(); piece.move(selection[1]); piece.draw()
+
+      
+      
+      
+      if PieceAt(selection[1][0], selection[1][1])[0]:
+        PieceAt(selection[1][0], selection[1][1])[1].remove()
+    
+    ttype.xyprint(i, 10, 37)
+    sleep(1)
+    for y in range(30,38): ttype.clearline(y)
 
 
 def ReversePieceDirection(dir):
@@ -256,8 +266,8 @@ class piece:
       for i in range(len(self.movePath)): newMovePath.append(ReversePieceDirection(self.movePath[i]))
       self.attackPath = newAtkPath; self.movePath = newMovePath
       
-  def eraseSelf(self): ttype.xyprint(' ', 7+10*self.pos[0], 3+4*self.pos[1])
-  def drawSelf(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])
+  def erase(self): ttype.xyprint(' ', 7+10*self.pos[0], 3+4*self.pos[1])
+  def draw(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])
   def remove(self): Pieces.remove(self)
   def move(self, newPos):
     self.pos = newPos
