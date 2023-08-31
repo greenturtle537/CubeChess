@@ -173,6 +173,8 @@ class ChessServer(BaseHTTPRequestHandler):
         jwrite("users.json", userjson)
         self.wfile.write(bytes(json.dumps({userjson}), "utf-8"))
       else:
+        print(username)
+        print(userjson)
         self.wfile.write(bytes(json.dumps({"result": ":c"}), "utf-8"))
 
   def do_POST(self):
