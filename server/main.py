@@ -124,8 +124,9 @@ def cleaner():
   for user in users:
     alive = user["keepalive"]
     dif = time_dif(get_time(), alive)
-    print(get_time())
-    print(dif)
+    #print(get_time())
+    #print(dif)
+  print("works")
 
 
 def login(username, password):
