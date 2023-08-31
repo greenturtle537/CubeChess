@@ -185,7 +185,7 @@ def InitSelector():
 
 def PieceAt(x, y):
   for piece in Pieces:
-    if tuple(piece.pos) == (x,y) or list(piece.pos) == [x,y]: return True, piece
+    if piece.pos == (x,y) or piece.pos == [x,y]: return True, piece
   else: return False, False
 
 
@@ -214,26 +214,25 @@ def GetPieceMove():
     ttype.xyprint('              ', 0, 35)
 
     
-    ttype.xyprint(f'{PieceAt(selection[0][0], selection[0][1])} -- {selection[0]}', 0, 0); sleep(1.5); ttype.clearline(0)
 
     # if you select
     if selection[0] != selection[1] and PieceAt(selection[0][0], selection[0][1])[0]:
-      ttype.xyprint('selection working', 0, 0); sleep(0.5); ttype.clearline(0)
       piece = PieceAt(selection[0][0], selection[0][1])[1]
       direction = CheckDirection(selection[0], selection[1])
       vector = (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1])
      
-      if (direction in piece.movePath) or (vector in piece.movePath): 
-        if piece.pos == (0,4): piece.erase(); piece.move(selection[1]); piece.draw()
+      if ((direction in piece.movePath) or (vector in piece.movePath)) and (not PieceAt(selection[1][0], selection[1][1])[0]): 
+        piece.erase(); piece.move(selection[1]); piece.draw()
 
+      elif ((direction in piece.attackPath) or (vector in piece.attackPath)) and (PieceAt(selection[1][0], selection[1][1])[0]):
+        piece.erase(); piece.move(selection[1]); piece.draw()
+        PieceAt(selection[1][0], selection[1][1])[1].remove()
       
   
-      # if PieceAt(selection[1][0], selection[1][1])[0]:
-      #   PieceAt(selection[1][0], selection[1][1])[1].remove()
     
-    ttype.xyprint(i, 10, 37)
-    sleep(1)
-    for y in range(30,38): ttype.clearline(y)
+    # ttype.xyprint(i, 10, 37)
+    # sleep(1)
+    # for y in range(30,38): ttype.clearline(y)
 
 
 def ReversePieceDirection(dir):
