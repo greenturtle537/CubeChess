@@ -99,15 +99,14 @@ def string2time(string):
 
 def cleaner():
   users = jload("users.json")
+  print(users)
   for user in users:
     alive = user["keepalive"]
-    print(user)
     dif = get_time() - string2time(alive)
     timeout = dif.total_seconds()
     if timeout >= 5:
       users.remove(user)
       jwrite("users.json", users)
-    
 
 
 def login(username, password):
@@ -148,7 +147,11 @@ class ChessServer(BaseHTTPRequestHandler):
       # 0 = Logged in
       # Interpret strings as chat room signatures
       if not {"name": username} in userjson:
-        blank = {"name": username, "keepalive": time2string(get_time()), "activity": "0"}
+        blank = {
+          "name": username,
+          "keepalive": time2string(get_time()),
+          "activity": "0"
+        }
         userjson.append(blank)
         jwrite("users.json", userjson)
         res["result"] = 1
@@ -158,10 +161,19 @@ class ChessServer(BaseHTTPRequestHandler):
       self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
 
     if p == "/time":
-      self.wfile.write(bytes(json.dumps({"result": get_time()}), "utf-8"))
+      self.wfile.write(
+        bytes(json.dumps({"result": time2string(get_time())}), "utf-8"))
 
     if p == "/keepalive":
-      self.wfile.write(bytes(json.dumps({"result": ":c"}), "utf-8"))
+      username = query_components["username"]
+      userjson = jload("users.json")
+      if {"name": username} in userjson:
+        userindex = userjson.index({"name": username})
+        userjson[userindex]["keepalive"] = time2string(get_time())
+        jwrite("users.json", userjson)
+        self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
+      else:
+        self.wfile.write(bytes(json.dumps({"result": ":c"}), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
