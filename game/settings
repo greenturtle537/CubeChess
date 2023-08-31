@@ -1,4 +1,6 @@
 {
   "board": "small",
-  "setup": 0
+  "setup": 0,
+
+  "debugOnBoot": false
 }

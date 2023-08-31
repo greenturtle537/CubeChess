@@ -18,37 +18,38 @@ def ReadMods():
 def LoadMods():
   global PieceById; PieceById = {}
   global PieceIds; PieceIds = []
-  print(ttype.t.mediumseagreen)
+  # check if debugOnBoot is on
+  debugOnBoot = json.GetDict('game/settings')['debugOnBoot']
+  if debugOnBoot: print(ttype.t.mediumseagreen)
   for line in dmLines:
-    # try:
-      if line[0] == 'c': pass #hard coded classes
-      elif '/' in line:
+    try:
+      if '/' in line:
         with open(line,'r') as modfile: pass
-        print(f"successfully loaded mod file {line}")
+        if debugOnBoot: print(f"successfully loaded mod file {line}")
       elif '.' in line: 
         name = line[line.find('.',line.find('.',line.find('.')+1)+1)+1:]
-        exec(f"import {line} as {name}")
-        exec(f"PieceIds.append('{eval(name).char}')")
-        exec("PieceById.update({'char': 1})".replace('1',name). replace('char',eval(name).char))
+        exec(f"import {line} as {name}"); exec(f"PieceIds.append('{eval(name).char}')"); exec("PieceById.update({'char': 1})".replace('1',name). replace('char',eval(name).char))
+    except: print(f"{ttype.t.red}error loading mod file '{line}'{ttype.t.white}")
 
-    # except: print(f"{ttype.t.red}error loading mod file '{line}'{ttype.t.white}")
+
 
 
 def LoadSettings(): 
-  print(ttype.t.rgb(0,100,0))
   data = json.GetDict('game/settings') # gets the settings file
+  if data['debugOnBoot']: print(ttype.t.rgb(0,100,0))
   global board, cornerBoard # global some variables for later use in other functions
   b = json.GetDict(f"game/modData/boards/{data['board']}.board") # loads the board file
   board = b['array'] # loads the array from the .board file
   for y in range(len(b['setup'][data['setup']])):
     for x in range(len(b['setup'][data['setup']][y])):
       piq = b['setup'][data['setup']][y][x]
-      if piq[1] in PieceIds: piece(x, y, PieceById[piq[1]], int(piq[0])); print(f'successfully placed piece id {piq[1]} at position ({x},{y})')
+      # check if piece id/char is in list of loaded ones
+      if piq[1] in PieceIds: 
+        piece(x, y, PieceById[piq[1]], int(piq[0]))
+        if data['debugOnBoot']: print(f'successfully placed piece id {piq[1]} at position ({x},{y})')
       elif piq[1] == ' ': continue
-      else: print(f'{ttype.t.red}could not place piece id {piq[1]} at position ({x},{y}){ttype.t.rgb(0,100,0)}')
+      elif data['debugOnBoot']: print(f'{ttype.t.red}could not place piece id {piq[1]} at position ({x},{y}){ttype.t.rgb(0,100,0)}')
       
-
-
   # make the cornerboard - 1 larger in width and height than board cause corner-count math
   cornerBoard = [[0b0000 for x in range(len(board[y])+1)] for y in range(len(board))]
   cornerBoard.append(cornerBoard[-1].copy())
@@ -229,7 +230,17 @@ def GetPieceMove():
         elif (CheckDirection(selection[0], selection[1]) in piece.movePath or (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1]) in piece.movePath) and (not PieceAt(selection[1][0], selection[1][1])[0]): piece.eraseSelf(); piece.pos = list(selection[1]); piece.drawSelf()
 
 
-
+def ReversePieceDirection(dir):
+  # string-based directions
+  if type(dir) == str: 
+    oDir = dir
+    if 'up' in oDir: dir = dir.replace('up','down')
+    if 'down' in oDir: dir = dir.replace('down','up')
+    if 'left' in oDir: dir = dir.replace('left','right')
+    if 'right' in oDir: dir = dir.replace('right','left')
+    return dir
+  # vector-based directions
+  if type(dir) == tuple: return (dir[0], -dir[1])
 
 
 
@@ -248,14 +259,10 @@ class piece:
     self.char = (TeamColor1 if color-1 else TeamColor2) + data.char + ttype.t.normal
     self.pos = [x, y]
     self.color = color
-    # if color == 2:
-    #   for i in range(len(self.attackPath)): 
-    #     if type(self.attackPath[i][1]) == int: self.attackPath[i] = (self.attackPath[i][0], -self.attackPath[i][1])
-    #     elif self.attackPath[i] in ['up','down','left','right']: self.attackPath[i] = ['right','left','down','up'][['up','down','left','right'].index(self.attackPath[i])]
+    if self.color == 2: 
+      for i in range(len(self.attackPath)): self.attackPath[i] = ReversePieceDirection(self.attackPath[i])
+      for i in range(len(self.movePath)): self.movePath[i] = ReversePieceDirection(self.movePath[i])
       
-    #   for i in range(len(self.movePath)): 
-    #     if type(self.movePath[i][1]) == int: self.movePath[i] = (self.movePath[i][0], -self.movePath[i][1])
-    #     elif self.movePath[i] in ['up','down','left','right']: self.movePath[i] = ['right','left','down','up'][['up','down','left','right'].index(self.movePath[i])]
 
   def eraseSelf(self): ttype.xyprint(' ', 7+10*self.pos[0], 3+4*self.pos[1])
   def drawSelf(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])
@@ -267,20 +274,24 @@ class piece:
 
 def Run():
   with ttype.t.hidden_cursor(), ttype.t.cbreak():
-  InitFunctionRecallVars()
-  ReadMods()
-  LoadMods()
-  LoadSettings(); sleep(1)
-  InitSelector()
-  
-  ttype.clear()
-  
-  
+    InitFunctionRecallVars()
+    ReadMods()
+    LoadMods()
+    LoadSettings(); sleep(1)
+    InitSelector()
+    
+    ttype.clear()
+    
+    
     PrintBoard()
     DrawPieces()
     while True:
       GetPieceMove()
       DrawPieces()
-  
+    
+
+
+if __name__ == '__main__': Run()
+
 
 ttype.xyinput('>>> ', 0, ttype.t.height-1)
