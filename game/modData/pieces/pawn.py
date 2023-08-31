@@ -1,4 +1,4 @@
-attackPath = [(x,-1) for x in range(-1,2,2)]
+attackPath = [(1,-1),(-1,-1)]
 movePath = [(0,-1),]
 pawnPromote = True
 canJumpPieces = True

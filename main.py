@@ -248,14 +248,14 @@ class piece:
     self.char = (TeamColor1 if color-1 else TeamColor2) + data.char + ttype.t.normal
     self.pos = [x, y]
     self.color = color
-    if color == 2:
-      for i in range(len(self.attackPath)): 
-        if type(self.attackPath[i][1]) == int: self.attackPath[i] = (self.attackPath[i][0], -self.attackPath[i][1])
-        elif self.attackPath[i] in ['up','down','left','right']: self.attackPath[i] = ['right','left','down','up'][['up','down','left','right'].index(self.attackPath[i])]
+    # if color == 2:
+    #   for i in range(len(self.attackPath)): 
+    #     if type(self.attackPath[i][1]) == int: self.attackPath[i] = (self.attackPath[i][0], -self.attackPath[i][1])
+    #     elif self.attackPath[i] in ['up','down','left','right']: self.attackPath[i] = ['right','left','down','up'][['up','down','left','right'].index(self.attackPath[i])]
       
-      for i in range(len(self.movePath)): 
-        if type(self.movePath[i][1]) == int: self.movePath[i] = (self.movePath[i][0], -self.movePath[i][1])
-        elif self.movePath[i] in ['up','down','left','right']: self.movePath[i] = ['right','left','down','up'][['up','down','left','right'].index(self.movePath[i])]
+    #   for i in range(len(self.movePath)): 
+    #     if type(self.movePath[i][1]) == int: self.movePath[i] = (self.movePath[i][0], -self.movePath[i][1])
+    #     elif self.movePath[i] in ['up','down','left','right']: self.movePath[i] = ['right','left','down','up'][['up','down','left','right'].index(self.movePath[i])]
 
   def eraseSelf(self): ttype.xyprint(' ', 7+10*self.pos[0], 3+4*self.pos[1])
   def drawSelf(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])
@@ -265,23 +265,22 @@ class piece:
 
 
 
-
-
-# ##### gameplay
-InitFunctionRecallVars()
-ReadMods()
-LoadMods()
-LoadSettings(); sleep(1)
-InitSelector()
-
-ttype.clear()
-
-with ttype.t.hidden_cursor(), ttype.t.cbreak():
-  PrintBoard()
-  DrawPieces()
-  while True:
-    GetPieceMove()
+def Run():
+  with ttype.t.hidden_cursor(), ttype.t.cbreak():
+  InitFunctionRecallVars()
+  ReadMods()
+  LoadMods()
+  LoadSettings(); sleep(1)
+  InitSelector()
+  
+  ttype.clear()
+  
+  
+    PrintBoard()
     DrawPieces()
-
+    while True:
+      GetPieceMove()
+      DrawPieces()
+  
 
 ttype.xyinput('>>> ', 0, ttype.t.height-1)
