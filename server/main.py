@@ -171,7 +171,7 @@ class ChessServer(BaseHTTPRequestHandler):
         userindex = userjson.index({"name": username})
         userjson[userindex]["keepalive"] = time2string(get_time())
         jwrite("users.json", userjson)
-        self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
+        self.wfile.write(bytes(json.dumps({userjson}), "utf-8"))
       else:
         self.wfile.write(bytes(json.dumps({"result": ":c"}), "utf-8"))
 

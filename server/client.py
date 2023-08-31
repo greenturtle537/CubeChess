@@ -29,5 +29,5 @@ req = r.json()
 print(req)
 #Frameloop sequence ahead, todo error handling
 while req["result"]:
-  print(users())
-  sleep(0.1)
+  print(keepalive(username))
+  sleep(0.5)
