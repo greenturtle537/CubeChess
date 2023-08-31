@@ -219,9 +219,11 @@ def GetPieceMove():
         piece.erase(); piece.move(selection[1]); piece.draw(); return
       # attacking code
       elif ((direction in piece.attackPath) or (vector in piece.attackPath) or (direction in CheckConditionals('attk', piece)) or (vector in CheckConditionals('attk', piece))) and (PieceAt(selection[1][0], selection[1][1])[0]):
-        piece.erase(); piece.move(selection[1]); piece.draw()
-        PieceAt(selection[1][0], selection[1][1])[1].remove()
-        return
+        # if piece.color == 2: PieceAt(selection[1][0], selection[1][1])[1].remove()
+        # piece.erase(); piece.move(selection[1]); piece.draw()
+        # if piece.color == 1: PieceAt(selection[1][0], selection[1][1])[1].remove()
+        for p in Pieces:
+          if tuple(p.pos) == tuple(selection[1]) and p != piece: piece.erase(); piece.move(selection[1]); piece.draw(); p.remove(); return
 
 
 
@@ -305,7 +307,7 @@ class dummypiece:
     self.pawnPromote = False
     self.canJumpPieces = self.canJumpEmpty = True
     self.char = self.id = '⚠'
-    self.pastMoves = []
+    self.pastMoves = [((63,63),-1,(63,63))]
 
   def __bool__(self): return False
 
