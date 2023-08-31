@@ -7,6 +7,10 @@ def en(input):
   return base62.encodebytes(bytes(input, "utf-8"))
 
 
+print("You have connected to GlitchChat")
+username = input("Please enter your username: ")
+
+
 def users():
   r = requests.get("http://glitchtech.top:8/users")
   req = r.json()
@@ -18,11 +22,6 @@ def keepalive(userid):
                    params={"username": userid})
   req = r.json()
   return req
-
-
-print("You have connected to GlitchChat")
-username = input("Please enter your username: ")
-
 r = requests.get("http://glitchtech.top:8/connect",
                  params={"username": username})
 req = r.json()
