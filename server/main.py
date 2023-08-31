@@ -9,6 +9,7 @@ from datetime import datetime
 import threading
 import time
 
+timestd = "%m:%d:%y:%H:%M:%S:%f"
 
 class RepeatedTimer(object):
 
@@ -80,14 +81,14 @@ def get_query(query):
 
 
 def get_time():
-  date = datetime.now().strftime("%m:%d:%y:%H:%M:%S:%f")
+  date = datetime.now().strftime(timestd)
   return date
 
 
 def clean_time(time):
   return time[0:17:1]
 
-
+''' All of this is awful, python has libraries for a reason.
 #TimeOne newer than TimeTwo please
 def time_compare(time1, time2):
   #08:24:23:19:29:03:032123
@@ -117,15 +118,16 @@ def count_seconds(time):
   seconds = time[5] + (time[4] * 60) + (time[3] * 3600) + (time[1] * 86400) + (
     time[0] * 2628000) + (time[2] * 31535965)
   return int(seconds)
-
+'''
 
 def cleaner():
   users = jload("users.json")
   for user in users:
     alive = user["keepalive"]
-    dif = time_dif(get_time(), alive)
-    print(get_time())
-    print(dif)
+    
+    #dif = time_dif(get_time(), alive)
+    #print(get_time())
+    #print(dif)
 
 
 def login(username, password):
