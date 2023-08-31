@@ -222,7 +222,9 @@ def GetPieceMove():
       direction = CheckDirection(selection[0], selection[1])
       vector = (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1])
      
-      if (direction in piece.movePath) or (vector in piece.movePath): piece.erase(); piece.move(selection[1]); piece.draw()
+      if (direction in piece.movePath) or (vector in piece.movePath): 
+        if piece.pos == (0,4): piece.erase(); piece.move(selection[1]); piece.draw()
+        if piece.pos == (0,4): piece.erase(); piece.pos = (0,4); piece.draw()
 
       
   
@@ -263,11 +265,11 @@ class piece:
     self.char = (TeamColor1 if color-1 else TeamColor2) + data.char + ttype.t.normal
     self.pos = [x, y]
     self.color = color
-    # if self.color == 2: 
-    #   newAtkPath = []; newMovePath = []
-    #   for i in range(len(self.attackPath)): newAtkPath.append(ReversePieceDirection(self.attackPath[i]))
-    #   for i in range(len(self.movePath)): newMovePath.append(ReversePieceDirection(self.movePath[i]))
-    #   self.attackPath = newAtkPath; self.movePath = newMovePath
+    if self.color == 2: 
+      newAtkPath = []; newMovePath = []
+      for i in range(len(self.attackPath)): newAtkPath.append(ReversePieceDirection(self.attackPath[i]))
+      for i in range(len(self.movePath)): newMovePath.append(ReversePieceDirection(self.movePath[i]))
+      self.attackPath = newAtkPath; self.movePath = newMovePath
       
   def erase(self): ttype.xyprint(' ', 7+10*self.pos[0], 3+4*self.pos[1])
   def draw(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])

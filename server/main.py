@@ -103,7 +103,7 @@ def cleaner():
     alive = user["keepalive"]
     dif = get_time() - string2time(alive)
     print(time2string(get_time()))
-    print(dif.count_seconds())
+    print(dif.total_seconds())
 
 
 def login(username, password):
