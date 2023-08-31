@@ -16,7 +16,6 @@ def ReadMods():
 
 
 def LoadMods():
-  from types import ModuleType as module
   global PieceById; PieceById = {}
   global PieceIds; PieceIds = []
   print(ttype.t.mediumseagreen)
@@ -46,7 +45,7 @@ def LoadSettings():
       piq = b['setup'][data['setup']][y][x]
       if piq[1] in PieceIds: piece(x, y, PieceById[piq[1]], int(piq[0])); print(f'successfully placed piece id {piq[1]} at position ({x},{y})')
       elif piq[1] == ' ': continue
-      else: print(f'could not place piece id {piq[1]} at position ({x},{y})')
+      else: print(f'{ttype.t.red}could not place piece id {piq[1]} at position ({x},{y}){ttype.t.rgb(0,100,0)}')
       
 
 
@@ -200,10 +199,18 @@ def PieceAt(x, y):
 
 
 def CheckDirection(pOld, pNew):
+  # straight detection
   if pOld[0] < pNew[0] and pOld[1] == pNew[1]: return 'right'
   if pOld[0] > pNew[0] and pOld[1] == pNew[1]: return 'left'
   if pOld[0] == pNew[0] and pOld[1] < pNew[1]: return 'down'
   if pOld[0] == pNew[0] and pOld[1] > pNew[1]: return 'up'
+  # diagonal detection
+  diag = pNew[0]-pOld[0] == pNew[1]-pOld[1]
+  if diag and pNew[0] > pOld[0] and pNew[1] < pOld[1]: return 'up-right'
+  if diag and pNew[0] < pOld[0] and pNew[1] < pOld[1]: return 'up-left'
+  if diag and pNew[0] < pOld[0] and pNew[1] > pOld[1]: return 'down-left'
+  if diag and pNew[0] > pOld[0] and pNew[1] > pOld[1]: return 'down-right'
+  # raw vector
   return (pNew[0]-pOld[0], pNew[1]-pOld[1])
 
 

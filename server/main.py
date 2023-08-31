@@ -87,38 +87,13 @@ def get_time():
 
 def clean_time(time):
   return time[0:17:1]
-
-''' All of this is awful, python has libraries for a reason.
-#TimeOne newer than TimeTwo please
-def time_compare(time1, time2):
-  #08:24:23:19:29:03:032123
-  timeOne = time1.split(":")
-  timeTwo = time2.split(":")
-  mod = [12, 30, 99, 24, 60, 60, 1000000]
-  newTime = ""
-  l = len(timeOne)
-  for i in range(l):
-    n = int(timeOne[l - i - 1]) - int(timeTwo[l - i - 1])
-    if n >= 0:
-      newTime = format(n, "02") + newTime
-    else:
-      newTime = format(mod[l - i - 1] - abs(n), "02") + newTime
-      timeOne[l - i - 1] = str((int(timeOne[l - i - 1]) - 1))
-    if not i + 1 == len(timeOne):
-      newTime = ":" + newTime
-  return newTime
-
-
-def time_dif(time1, time2):
-  return (count_seconds(time1) - count_seconds(time2))
-
-
-def count_seconds(time):
-  time = time.split(":")
-  seconds = time[5] + (time[4] * 60) + (time[3] * 3600) + (time[1] * 86400) + (
-    time[0] * 2628000) + (time[2] * 31535965)
-  return int(seconds)
-'''
+  # open the chat tab
+  # open the chat tab
+  # open the chat tab
+  # open the chat tab
+  # open the chat tab
+  # open the chat tab
+  # open the chat tab
 
 def cleaner():
   users = jload("users.json")

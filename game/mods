@@ -1,3 +1,8 @@
 boards/square
+boards/small
 pieces/pawn
 pieces/rook
+pieces/knight
+pieces/bishop
+pieces/queen
+pieces/king
