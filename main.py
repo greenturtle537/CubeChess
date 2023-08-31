@@ -207,19 +207,18 @@ def CheckDirection(pOld, pNew):
 
 
 def GetPieceMove():
-  while True: 
+  for i in range(3): 
     selection = SelectBoardSpace()
     ttype.xyprint('              ', 0, 35)
 
     if selection[0] != selection[1]:
       if PieceAt(selection[0][0], selection[0][1])[0]:
         piece = PieceAt(selection[0][0], selection[0][1])[1]
-        # ttype.xyprint(str(piece.attackPath), 5, 35)
-        # ttype.xyprint(str(CheckDirection(selection[0], selection[1])), 5, 36)
         # check if the move is valid in attack path and there is a target
         if (CheckDirection(selection[0], selection[1]) in piece.attackPath or (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1]) in piece.attackPath) and PieceAt(selection[1][0], selection[1][1])[0]: PieceAt(selection[1][0], selection[1][1])[1].remove(); piece.eraseSelf(); piece.move(selection[1]); piece.drawSelf()
         # check if move is valid in move path and there is no target
         elif (CheckDirection(selection[0], selection[1]) in piece.movePath or (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1]) in piece.movePath) and (not PieceAt(selection[1][0], selection[1][1])[0]): piece.eraseSelf(); piece.move(selection[1]); piece.drawSelf()
+    ttype.xyprint(i, 15, 40)
 
 
 def ReversePieceDirection(dir):
