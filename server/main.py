@@ -101,9 +101,13 @@ def cleaner():
   users = jload("users.json")
   for user in users:
     alive = user["keepalive"]
+    print(user)
     dif = get_time() - string2time(alive)
-    print(time2string(get_time()))
-    print(dif.total_seconds())
+    timeout = dif.total_seconds()
+    if timeout >= 5:
+      users.remove(user)
+      jwrite("users.json", users)
+    
 
 
 def login(username, password):

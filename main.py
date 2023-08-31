@@ -185,7 +185,7 @@ def InitSelector():
 
 def PieceAt(x, y):
   for piece in Pieces:
-    if piece.pos == [x,y]: return True, piece
+    if tuple(piece.pos) == (x,y) or list(piece.pos) == [x,y]: return True, piece
   else: return False, False
 
 
@@ -212,6 +212,7 @@ def GetPieceMove():
     i += 1
     selection = SelectBoardSpace()
     ttype.xyprint('              ', 0, 35)
+
     
     ttype.xyprint(f'{PieceAt(selection[0][0], selection[0][1])} -- {selection[0]}', 0, 0); sleep(1.5); ttype.clearline(0)
 
@@ -224,7 +225,6 @@ def GetPieceMove():
      
       if (direction in piece.movePath) or (vector in piece.movePath): 
         if piece.pos == (0,4): piece.erase(); piece.move(selection[1]); piece.draw()
-        if piece.pos == (0,4): piece.erase(); piece.pos = (0,4); piece.draw()
 
       
   
