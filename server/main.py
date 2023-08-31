@@ -106,7 +106,8 @@ def cleaner():
     timeout = dif.total_seconds()
     if timeout >= 5:
       users.remove(user)
-  jwrite("users.json", users)
+      jwrite("users.json", users)
+    
 
 
 def login(username, password):
@@ -134,7 +135,6 @@ class ChessServer(BaseHTTPRequestHandler):
     self.send_response(200)
     self.send_header("Content-type", "text/json")
     self.end_headers()
-    cleaner()
 
     if p == "/connect":
       # Result 0: Username already in use
@@ -148,7 +148,7 @@ class ChessServer(BaseHTTPRequestHandler):
       # 0 = Logged in
       # Interpret strings as chat room signatures
       if not {"name": username} in userjson:
-        blank = {"name": username, "keepalive": get_time(), "activity": "0"}
+        blank = {"name": username, "keepalive": time2string(get_time()), "activity": "0"}
         userjson.append(blank)
         jwrite("users.json", userjson)
         res["result"] = 1
@@ -183,11 +183,15 @@ class ChessServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
   webServer = HTTPServer((hostName, serverPort), ChessServer)
-  print("Server started http://%s:%s" % (hostName, serverPort))
+  rt = RepeatedTimer(1, cleaner)  # it auto-starts, no need of rt.start()
   try:
-    webServer.serve_forever()
-  except KeyboardInterrupt:
-    pass
+    print("Server started http://%s:%s" % (hostName, serverPort))
+    try:
+      webServer.serve_forever()
+    except KeyboardInterrupt:
+      pass
+  finally:
+    rt.stop()
 
   webServer.server_close()
   print("Server stopped.")
