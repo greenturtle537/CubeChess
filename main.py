@@ -105,17 +105,7 @@ def PrintBoard():
   # board styling for showing what's available space and what's a gap
   for y in range(len(board)):
     for x in range(len(board[y])):
-      if board[y][x] == 1: 
-        # # style 1
-        # ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭   ╮', 5+10*x, 2+4*y); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰   ╯', 5+10*x, 4+4*y)
-        # # style 2
-        # ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭     ╮', 4+10*x, 2+4*y); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰     ╯', 4+10*x, 4+4*y)
-        # # style 3
-        # ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}◜   ◝', 5+10*x, 2+4*y); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}◟   ◞', 5+10*x, 4+4*y)
-        # style 4
-        # ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}◜     ◝', 4+10*x, 2+4*y); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}◟     ◞', 4+10*x, 4+4*y)
-        # # style 5
-        ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*x, 2+4*y); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*x, 4+4*y)
+      if board[y][x] == 1: ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*x, 2+4*y); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*x, 4+4*y)
 
 
 
@@ -224,10 +214,12 @@ def GetPieceMove():
     if selection[0] != selection[1]:
       if PieceAt(selection[0][0], selection[0][1])[0]:
         piece = PieceAt(selection[0][0], selection[0][1])[1]
-        
-        if PieceAt(selection[1][0], selection[1][1])[0] and CheckDirection(selection[0], selection[1]) in piece.attackPath: PieceAt(selection[1][0], selection[1][1])[1].remove(); piece.eraseSelf(); piece.pos = list(selection[1]); piece.drawSelf()
-          
-        elif (CheckDirection(selection[0], selection[1]) in piece.movePath or (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1]) in piece.movePath) and (not PieceAt(selection[1][0], selection[1][1])[0]): piece.eraseSelf(); piece.pos = list(selection[1]); piece.drawSelf()
+        # ttype.xyprint(str(piece.attackPath), 5, 35)
+        # ttype.xyprint(str(CheckDirection(selection[0], selection[1])), 5, 36)
+        # check if the move is valid in attack path and there is a target
+        if (CheckDirection(selection[0], selection[1]) in piece.attackPath or (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1]) in piece.attackPath) and PieceAt(selection[1][0], selection[1][1])[0]: PieceAt(selection[1][0], selection[1][1])[1].remove(); piece.eraseSelf(); piece.move(selection[1]); piece.drawSelf()
+        # check if move is valid in move path and there is no target
+        elif (CheckDirection(selection[0], selection[1]) in piece.movePath or (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1]) in piece.movePath) and (not PieceAt(selection[1][0], selection[1][1])[0]): piece.eraseSelf(); piece.move(selection[1]); piece.drawSelf()
 
 
 def ReversePieceDirection(dir):
@@ -260,14 +252,16 @@ class piece:
     self.pos = [x, y]
     self.color = color
     if self.color == 2: 
-      for i in range(len(self.attackPath)): self.attackPath[i] = ReversePieceDirection(self.attackPath[i])
-      for i in range(len(self.movePath)): self.movePath[i] = ReversePieceDirection(self.movePath[i])
+      newAtkPath = []; newMovePath = []
+      for i in range(len(self.attackPath)): newAtkPath.append(ReversePieceDirection(self.attackPath[i]))
+      for i in range(len(self.movePath)): newMovePath.append(ReversePieceDirection(self.movePath[i]))
+      self.attackPath = newAtkPath; self.movePath = newMovePath
       
-
   def eraseSelf(self): ttype.xyprint(' ', 7+10*self.pos[0], 3+4*self.pos[1])
   def drawSelf(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])
   def remove(self): Pieces.remove(self)
-
+  def move(self, newPos):
+    self.pos = newPos
 
 
 
