@@ -13,6 +13,13 @@ def users():
   return req
 
 
+def keepalive(userid):
+  r = requests.get("http://glitchtech.top:8/keepalive",
+                   params={"username": userid})
+  req = r.json()
+  return req
+
+
 print("You have connected to GlitchChat")
 username = input("Please enter your username: ")
 

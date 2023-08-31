@@ -182,11 +182,10 @@ def InitSelector():
 
 
 
-
 def PieceAt(x, y):
   for piece in Pieces:
     if piece.pos == (x,y) or piece.pos == [x,y]: return True, piece
-  else: return False, False
+  else: return False, dummypiece()
 
 
 def CheckDirection(pOld, pNew):
@@ -196,7 +195,7 @@ def CheckDirection(pOld, pNew):
   if pOld[0] == pNew[0] and pOld[1] < pNew[1]: return 'down'
   if pOld[0] == pNew[0] and pOld[1] > pNew[1]: return 'up'
   # diagonal detection
-  diag = pNew[0]-pOld[0] == pNew[1]-pOld[1]
+  diag = abs(pNew[0]-pOld[0]) == abs(pNew[1]-pOld[1])
   if diag and pNew[0] > pOld[0] and pNew[1] < pOld[1]: return 'up-right'
   if diag and pNew[0] < pOld[0] and pNew[1] < pOld[1]: return 'up-left'
   if diag and pNew[0] < pOld[0] and pNew[1] > pOld[1]: return 'down-left'
@@ -207,32 +206,23 @@ def CheckDirection(pOld, pNew):
 
 
 def GetPieceMove():
-  i = 0
   while True:
-    i += 1
     selection = SelectBoardSpace()
-    ttype.xyprint('              ', 0, 35)
 
-    
-
-    # if you select
+    # if you select 2 different squares and the first one is a piece
     if selection[0] != selection[1] and PieceAt(selection[0][0], selection[0][1])[0]:
       piece = PieceAt(selection[0][0], selection[0][1])[1]
       direction = CheckDirection(selection[0], selection[1])
       vector = (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1])
-     
-      if ((direction in piece.movePath) or (vector in piece.movePath)) and (not PieceAt(selection[1][0], selection[1][1])[0]): 
-        piece.erase(); piece.move(selection[1]); piece.draw()
-
-      elif ((direction in piece.attackPath) or (vector in piece.attackPath)) and (PieceAt(selection[1][0], selection[1][1])[0]):
+      # moving code
+      if ((direction in piece.movePath) or (vector in piece.movePath) or (direction in CheckConditionals('move', piece)) or (vector in CheckConditionals('move', piece))) and (not PieceAt(selection[1][0], selection[1][1])[0]): 
+        piece.erase(); piece.move(selection[1]); piece.draw(); return
+      # attacking code
+      elif ((direction in piece.attackPath) or (vector in piece.attackPath) or (direction in CheckConditionals('attk', piece)) or (vector in CheckConditionals('attk', piece))) and (PieceAt(selection[1][0], selection[1][1])[0]):
         piece.erase(); piece.move(selection[1]); piece.draw()
         PieceAt(selection[1][0], selection[1][1])[1].remove()
-      
-  
-    
-    # ttype.xyprint(i, 10, 37)
-    # sleep(1)
-    # for y in range(30,38): ttype.clearline(y)
+        return
+
 
 
 def ReversePieceDirection(dir):
@@ -248,8 +238,26 @@ def ReversePieceDirection(dir):
   if type(dir) == tuple: return (dir[0], -dir[1])
 
 
+# condition move list resulter
+def CheckConditionals(type, piece): return [i[0] if i[1](piece, Board, Game) else None for i in (piece.conditionalMovePath if type == 'move' else piece.conditionalAttackPath)]
 
 
+
+# predefine the piece class so when the Board class refrences a piece object it doesn't say the piece is undefined
+class piece: pass
+  
+# board class stores functions for writing custom pieces
+class Board:
+  def _defvars(self): self.array = board
+  def PieceAt(self, x: int, y: int) -> tuple[bool, piece]: return PieceAt(x,y)
+  def TileAt(self, x: int, y: int) -> int: return board[y][x]
+  def IsTileAT(self, x: int, y: int) -> bool: return board[y][x] > 0
+Board = Board()
+
+# game class stores generic game data for custom pieces
+class Game:
+  def __init__(self): self.turn = 0
+Game = Game()
 
 # global main game vars
 Pieces = []
@@ -262,19 +270,45 @@ class piece:
     self.canJumpPieces = data.canJumpPieces
     self.canJumpEmpty = data.canJumpEmpty
     self.char = (TeamColor1 if color-1 else TeamColor2) + data.char + ttype.t.normal
+    self.id = data.char
     self.pos = [x, y]
     self.color = color
+    self.conditionalMovePath = data.conditionalMovePath
+    self.conditionalAttackPath = data.conditionalAttackPath
+    self.pastMoves = [self.pos]
+    self.onMove = data.onMove
+
+
     if self.color == 2: 
-      newAtkPath = []; newMovePath = []
+      newAtkPath = []; newMovePath = []; newConditionalMovePath = []; newConditionalAttackPath = []
       for i in range(len(self.attackPath)): newAtkPath.append(ReversePieceDirection(self.attackPath[i]))
       for i in range(len(self.movePath)): newMovePath.append(ReversePieceDirection(self.movePath[i]))
-      self.attackPath = newAtkPath; self.movePath = newMovePath
+      for i in range(len(self.conditionalMovePath)): newConditionalMovePath.append((ReversePieceDirection(self.conditionalMovePath[i][0]), self.conditionalMovePath[i][1]))
+      for i in range(len(self.conditionalAttackPath)): newConditionalAttackPath.append((ReversePieceDirection(self.conditionalAttackPath[i][0]), self.conditionalAttackPath[i][1]))
+      self.attackPath = newAtkPath; self.movePath = newMovePath; self.conditionalMovePath = newAtkPath; self.conditionalMovePath = newConditionalMovePath
       
   def erase(self): ttype.xyprint(' ', 7+10*self.pos[0], 3+4*self.pos[1])
   def draw(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])
-  def remove(self): Pieces.remove(self)
+  def remove(self): self.erase(); Pieces.remove(self)
   def move(self, newPos):
-    self.pos = newPos; ttype.xyprint(f'moved to {newPos}', 0, 0); sleep(0.5); ttype.clearline(0)
+    oldPos = self.pos
+    self.pos = newPos
+    self.pastMoves.append((self.pos,Game.turn,(newPos[0]-oldPos[0], newPos[1]-oldPos[1])))
+    self.onMove(self, Game, Board, Pieces, oldPos, newPos)
+
+
+
+class dummypiece:
+  def __init__(self):
+    self.attackPath = self.movePath = []
+    self.conditionalAttackPath = self.conditionalMovePath = []
+    self.pawnPromote = False
+    self.canJumpPieces = self.canJumpEmpty = True
+    self.char = self.id = '⚠'
+    self.pastMoves = []
+
+  def __bool__(self): return False
+
 
 
 
@@ -286,6 +320,8 @@ def Run():
     LoadMods()
     LoadSettings(); sleep(1)
     InitSelector()
+
+    Board._defvars()
     
     ttype.clear()
     
@@ -293,6 +329,8 @@ def Run():
     PrintBoard()
     DrawPieces()
     while True:
+      Game.turn += 1
+      ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
       GetPieceMove()
       DrawPieces()
     
