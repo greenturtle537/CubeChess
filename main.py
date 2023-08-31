@@ -213,7 +213,7 @@ def GetPieceMove():
     selection = SelectBoardSpace()
     ttype.xyprint('              ', 0, 35)
     
-    ttype.xyprint(f'{PieceAt(selection[0][0], selection[0][1])[0]} -- {selection[0][0]}', 0, 0); sleep(1.5); ttype.clearline(0)
+    ttype.xyprint(f'{PieceAt(selection[0][0], selection[0][1])} -- {selection[0]}', 0, 0); sleep(1.5); ttype.clearline(0)
 
     # if you select
     if selection[0] != selection[1] and PieceAt(selection[0][0], selection[0][1])[0]:
