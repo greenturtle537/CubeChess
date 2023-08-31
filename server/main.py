@@ -167,6 +167,9 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/keepalive":
       username = query_components["username"]
       userjson = jload("users.json")
+      if ["name"] in userjson == username:
+        print("heehee")
+
       if {"name": username} in userjson:
         userindex = userjson.index({"name": username})
         userjson[userindex]["keepalive"] = time2string(get_time())
