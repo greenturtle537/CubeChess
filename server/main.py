@@ -82,7 +82,7 @@ def get_query(query):
 
 
 def time2string(time):
-  return time.strftime(timestd)
+  return datetime.strftime(timestd)
 
 
 def get_time():
@@ -94,7 +94,7 @@ def clean_time(time):
 
 
 def string2time(string):
-  return time.strptime(string, timestd)
+  return datetime.strptime(string, timestd)
 
 
 def cleaner():
