@@ -106,8 +106,7 @@ def cleaner():
     timeout = dif.total_seconds()
     if timeout >= 5:
       users.remove(user)
-      jwrite("users.json", users)
-    
+  jwrite("users.json", users)
 
 
 def login(username, password):
@@ -135,6 +134,7 @@ class ChessServer(BaseHTTPRequestHandler):
     self.send_response(200)
     self.send_header("Content-type", "text/json")
     self.end_headers()
+    cleaner()
 
     if p == "/connect":
       # Result 0: Username already in use
@@ -183,15 +183,11 @@ class ChessServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
   webServer = HTTPServer((hostName, serverPort), ChessServer)
-  rt = RepeatedTimer(1, cleaner)  # it auto-starts, no need of rt.start()
+  print("Server started http://%s:%s" % (hostName, serverPort))
   try:
-    print("Server started http://%s:%s" % (hostName, serverPort))
-    try:
-      webServer.serve_forever()
-    except KeyboardInterrupt:
-      pass
-  finally:
-    rt.stop()
+    webServer.serve_forever()
+  except KeyboardInterrupt:
+    pass
 
   webServer.server_close()
   print("Server stopped.")
