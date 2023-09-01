@@ -218,24 +218,22 @@ def GetPieceMove():
       if ((direction in piece.movePath) or (vector in piece.movePath) or (direction in CheckConditionals('move', piece)) or (vector in CheckConditionals('move', piece))) and (not PieceAt(selection[1][0], selection[1][1])[0]):
         crossesEmpty = jumpsPiece = False
         if direction in ['up','down']: 
-          for y in range(min([selection[0][1],selection[1][1]]),max([selection[0][1],selection[1][1]])): 
+          for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
             if PieceAt(selection[0][0], y): jumpsPiece = True
             elif not board[y][selection[0][0]]: crossesEmpty: True
         if direction in ['left','right']: 
-          for x in range(min([selection[0][0],selection[1][0]]),max([selection[0][0],selection[1][0]])): 
+          for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
             if PieceAt(x, selection[0][1]): jumpsPiece = True
             elif not board[selection[0][1]][x]: crossesEmpty: True
         if direction == 'up-left': pass
         if direction == 'up-right': pass
         if direction == 'down-left': pass
         if direction == 'down-right': pass
-        if ((not crossesEmpty) and (not jumpsPiece)) or \
-         (crossesEmpty and piece.canJumpEmpty) and (not jumpsPiece): piece.erase(); piece.move(selection[1]); piece.draw(); return
-        if: 
-        
-        
-        
-        
+        if ((not crossesEmpty) and (not jumpsPiece)) or ((crossesEmpty and piece.canJumpEmpty) and (not jumpsPiece)) or ((crossesEmpty and piece.canJumpEmpty) and (jumpsPiece and piece.canJumpPieces)) or ((not crossesEmpty) and (jumpsPiece and piece.canJumpPieces)): piece.erase(); piece.move(selection[1]); piece.draw()
+
+
+
+
       # attacking code
       elif ((direction in piece.attackPath) or (vector in piece.attackPath) or (direction in CheckConditionals('attk', piece)) or (vector in CheckConditionals('attk', piece))) and (PieceAt(selection[1][0], selection[1][1])[0]):
         for p in Pieces:
@@ -313,7 +311,8 @@ class piece:
     oldPos = self.pos
     self.pos = newPos
     self.pastMoves.append((self.pos,Game.turn,(newPos[0]-oldPos[0], newPos[1]-oldPos[1])))
-    self.onMove(self, Game, Board, Pieces, oldPos, newPos)
+    try:self.onMove(self, Game, Board, Pieces, oldPos, newPos)
+    except: pass
 
 
 

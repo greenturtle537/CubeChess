@@ -174,10 +174,9 @@ class ChessServer(BaseHTTPRequestHandler):
       control = False
       for item in userjson:
         if item["name"] == username:
-          control = True
+          control = item
       if control:
-        userindex = userjson.index({"name": username})
-        userjson[userindex]["keepalive"] = time2string(get_time())
+        control["keepalive"] = time2string(get_time())
         jwrite("users.json", userjson)
         self.wfile.write(bytes(json.dumps({userjson}), "utf-8"))
       else:
