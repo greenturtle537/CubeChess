@@ -243,12 +243,13 @@ def GetPieceMove():
         
         if crossesEmpty: 
           ttype.xyprint('crosses empty', 4, 33)
-          if not piece.canJumpEmpties
+          if not piece.canJumpEmpties: canMove = False
           
 
         sleep(1.5)
         for i in range(32,34): ttype.clearline(i)
 
+        if canMove: movePiece()
 
 
       # attacking code
