@@ -178,7 +178,7 @@ class ChessServer(BaseHTTPRequestHandler):
       if control:
         control["keepalive"] = time2string(get_time())
         jwrite("users.json", userjson)
-        self.wfile.write(bytes(json.dumps({userjson}), "utf-8"))
+        self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
       else:
         print(username)
         print(userjson)

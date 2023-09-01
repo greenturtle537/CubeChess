@@ -311,8 +311,7 @@ class piece:
     oldPos = self.pos
     self.pos = newPos
     self.pastMoves.append((self.pos,Game.turn,(newPos[0]-oldPos[0], newPos[1]-oldPos[1])))
-    try:self.onMove(self, Game, Board, Pieces, oldPos, newPos)
-    except: pass
+    self.onMove(self, Game, Board, Pieces, oldPos, newPos)
 
 
 

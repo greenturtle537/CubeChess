@@ -10,7 +10,7 @@ conditionalMovePath = [
 
   ((1,-1), lambda p, b, g: (b.PieceAt(p.pos[0]+1, p.pos[1])[1].id == 'p') and (b.PieceAt(p.pos[0]+1, p.pos[1])[1].pastMoves[-1][1] == g.turn-1) and (abs(b.PieceAt(p.pos[0]+1, p.pos[1])[1].pastMoves[-1][2][1]) == 2)),   # en passant right side
   
-  ((-1,-1), lambda p, b, g: (b.PieceAt(p.pos[0]-1, p.pos[1])[1].id == 'p') and (b.PieceAt(p.pos[0]-1, p.pos[1])[1].pastMoves[-1][1] == g.turn-1) and (abs(b.PieceAt(p.pos[0]-1, p.pos[1])[1].pastMoves[-1][2][1]) == 2))   # en passant left side
+  ((-1,-1), eval("lambda p, b, g: (b.PieceAt(p.pos[0]-1, p.pos[1])[1].id == 'p') and (b.PieceAt(p.pos[0]-1, p.pos[1])[1].pastMoves[-1][1] == g.turn-1) and (abs(b.PieceAt(p.pos[0]-1, p.pos[1])[1].pastMoves[-1][2][1]) == 2))   # en passant left side
 ]
 conditionalAttackPath = []
 def onMove(self, game, board, pieces, oldPos, newPos): 
