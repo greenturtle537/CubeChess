@@ -217,9 +217,10 @@ def GetPieceMove():
       # moving code
       if ((direction in piece.movePath) or (vector in piece.movePath) or (direction in CheckConditionals('move', piece)) or (vector in CheckConditionals('move', piece))) and (not PieceAt(selection[1][0], selection[1][1])[0]):
         crossesEmpty = jumpsPiece = False
+        crossed = [(-1,-1), dummypiece()]
         if direction in ['up','down']: 
           for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
-            if PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1] != piece: jumpsPiece = True
+            if PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1] != piece: jumpsPiece = True; crossed[1] = PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1]
             elif not board[y][selection[0][0]]: crossesEmpty: True
         if direction in ['left','right']: 
           for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
@@ -238,16 +239,17 @@ def GetPieceMove():
         canMove = True
         if jumpsPiece: 
           ttype.xyprint('jumps piece', 4, 32)
+          ttype.xyprint(f'piece jumped: {crossed[1].char} || pos: {crossed[1].pos}', 4, 33)
           if not piece.canJumpPieces: canMove = False
           
         
         if crossesEmpty: 
-          ttype.xyprint('crosses empty', 4, 33)
+          ttype.xyprint('crosses empty', 4, 37)
           if not piece.canJumpEmpties: canMove = False
           
 
-        sleep(.3)
-        for i in range(32,34): ttype.clearline(i)
+        sleep(1.2)
+        for i in range(32,35): ttype.clearline(i)
 
         if canMove: movePiece()
 

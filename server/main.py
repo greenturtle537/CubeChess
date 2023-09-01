@@ -121,6 +121,7 @@ def login(username, password):
         ret["res"] = 3
   return ret
 
+
 def superlist_finder(superlist, target, key):
   control = False
   for item in superlist:
@@ -128,12 +129,14 @@ def superlist_finder(superlist, target, key):
       control = item
   return control
 
+
 def superlist_antifinder(superlist, target, key):
   control = True
   for item in superlist:
     if item[key] == target:
       control = False
   return control
+
 
 class ChessServer(BaseHTTPRequestHandler):
 
@@ -172,7 +175,7 @@ class ChessServer(BaseHTTPRequestHandler):
 
     if p == "/users":
       self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
-      
+
     if p == "/time":
       self.wfile.write(
         bytes(json.dumps({"result": time2string(get_time())}), "utf-8"))
@@ -189,7 +192,6 @@ class ChessServer(BaseHTTPRequestHandler):
         print(username)
         print(userjson)
         self.wfile.write(bytes(json.dumps({"result": ":c"}), "utf-8"))
-    if 
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
