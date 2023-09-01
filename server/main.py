@@ -146,7 +146,11 @@ class ChessServer(BaseHTTPRequestHandler):
       # Number activities are hardcoded as follows
       # 0 = Logged in
       # Interpret strings as chat room signatures
-      if not {"name": username} in userjson:
+      control = True
+      for item in userjson:
+        if item["name"] == username:
+          control = False
+      if control:
         blank = {
           "name": username,
           "keepalive": time2string(get_time()),
@@ -167,10 +171,11 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/keepalive":
       username = query_components["username"]
       userjson = jload("users.json")
-      if ["name"] in userjson == username:
-        print("heehee")
-
-      if {"name": username} in userjson:
+      control = False
+      for item in userjson:
+        if item["name"] == username:
+          control = True
+      if control:
         userindex = userjson.index({"name": username})
         userjson[userindex]["keepalive"] = time2string(get_time())
         jwrite("users.json", userjson)

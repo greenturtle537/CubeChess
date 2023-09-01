@@ -215,15 +215,25 @@ def GetPieceMove():
       direction = CheckDirection(selection[0], selection[1])
       vector = (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1])
       # moving code
-      if ((direction in piece.movePath) or (vector in piece.movePath) or (direction in CheckConditionals('move', piece)) or (vector in CheckConditionals('move', piece))) and (not PieceAt(selection[1][0], selection[1][1])[0]): 
+      if ((direction in piece.movePath) or (vector in piece.movePath) or (direction in CheckConditionals('move', piece)) or (vector in CheckConditionals('move', piece))) and (not PieceAt(selection[1][0], selection[1][1])[0]):
+        crossesEmpty = jumpsPiece = False
+        if direction in ['up','down']: 
+          for y in range(min([selection[0][1],selection[1][1]]),max([selection[0][1],selection[1][1]])): 
+        if direction in ['left','right']: pass
+        if direction == 'up-left': pass
+        if direction == 'up-right': pass
+        if direction == 'down-left': pass
+        if direction == 'down-right': pass
+        
         piece.erase(); piece.move(selection[1]); piece.draw(); return
+        
+        
+        
       # attacking code
       elif ((direction in piece.attackPath) or (vector in piece.attackPath) or (direction in CheckConditionals('attk', piece)) or (vector in CheckConditionals('attk', piece))) and (PieceAt(selection[1][0], selection[1][1])[0]):
-        # if piece.color == 2: PieceAt(selection[1][0], selection[1][1])[1].remove()
-        # piece.erase(); piece.move(selection[1]); piece.draw()
-        # if piece.color == 1: PieceAt(selection[1][0], selection[1][1])[1].remove()
         for p in Pieces:
-          if tuple(p.pos) == tuple(selection[1]) and p != piece: piece.erase(); piece.move(selection[1]); piece.draw(); p.remove(); return
+          if tuple(p.pos) == tuple(selection[1]) and p != piece: 
+            piece.erase(); piece.move(selection[1]); piece.draw(); p.remove(); return
 
 
 
