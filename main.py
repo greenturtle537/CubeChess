@@ -218,7 +218,7 @@ def GetPieceMove():
       if ((direction in piece.movePath) or (vector in piece.movePath) or (direction in CheckConditionals('move', piece)) or (vector in CheckConditionals('move', piece))) and (not PieceAt(selection[1][0], selection[1][1])[0]):
         crossesEmpty = jumpsPiece = False
         if direction in ['up','down']: 
-          for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])+1): 
+          for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
             if PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1] != piece: jumpsPiece = True
             elif not board[y][selection[0][0]]: crossesEmpty: True
         if direction in ['left','right']: 
@@ -246,7 +246,7 @@ def GetPieceMove():
           if not piece.canJumpEmpties: canMove = False
           
 
-        sleep(1.5)
+        sleep(.3)
         for i in range(32,34): ttype.clearline(i)
 
         if canMove: movePiece()

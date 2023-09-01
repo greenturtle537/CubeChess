@@ -1,5 +1,5 @@
 def EnPassantRight(p, b, g):
-  if b.PieceAt(p.pos[0]+(-1 if p.color-1 else 1), p.pos[1])[1].id == 'p' and len(b.PieceAt(p.pos[0]+(-1 if p.color-1 else 1), p.pos[1])[1].pastMoves) > 1 and b.PieceAt(p.pos[0]+(-1 if p.color-1 else 1), p.pos[1])[-1].pastMoves[-1][2][1] in [-2,2]: input(f"\r  {b.PieceAt(p.pos[0]+(-1 if p.color-1 else 1), p.pos[1])[1].pastMoves[-1][1]}  {g.turn}     "); return True
+  if b.PieceAt(p.pos[0]+(-1 if p.color-1 else 1), p.pos[1])[1].id == 'p' and len(b.PieceAt(p.pos[0]+(-1 if p.color-1 else 1), p.pos[1])[1].pastMoves) > 1 and b.PieceAt(p.pos[0]+(-1 if p.color-1 else 1), p.pos[1])[-1].pastMoves[-1][2][1] in [-2,2]: return True
   return False
   
 def EnPassantLeft(p, b, g):

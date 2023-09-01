@@ -121,6 +121,19 @@ def login(username, password):
         ret["res"] = 3
   return ret
 
+def superlist_finder(superlist, target, key):
+  control = False
+  for item in superlist:
+    if item[key] == target:
+      control = item
+  return control
+
+def superlist_antifinder(superlist, target, key):
+  control = True
+  for item in superlist:
+    if item[key] == target:
+      control = False
+  return control
 
 class ChessServer(BaseHTTPRequestHandler):
 
@@ -146,11 +159,7 @@ class ChessServer(BaseHTTPRequestHandler):
       # Number activities are hardcoded as follows
       # 0 = Logged in
       # Interpret strings as chat room signatures
-      control = True
-      for item in userjson:
-        if item["name"] == username:
-          control = False
-      if control:
+      if superlist_antifinder(userjson, username, "name"):
         blank = {
           "name": username,
           "keepalive": time2string(get_time()),
@@ -163,7 +172,7 @@ class ChessServer(BaseHTTPRequestHandler):
 
     if p == "/users":
       self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
-
+      
     if p == "/time":
       self.wfile.write(
         bytes(json.dumps({"result": time2string(get_time())}), "utf-8"))
@@ -171,10 +180,7 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/keepalive":
       username = query_components["username"]
       userjson = jload("users.json")
-      control = False
-      for item in userjson:
-        if item["name"] == username:
-          control = item
+      control = superlist_finder(userjson, username, "name")
       if control:
         control["keepalive"] = time2string(get_time())
         jwrite("users.json", userjson)
@@ -183,6 +189,7 @@ class ChessServer(BaseHTTPRequestHandler):
         print(username)
         print(userjson)
         self.wfile.write(bytes(json.dumps({"result": ":c"}), "utf-8"))
+    if 
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])
