@@ -219,13 +219,20 @@ def GetPieceMove():
         crossesEmpty = jumpsPiece = False
         if direction in ['up','down']: 
           for y in range(min([selection[0][1],selection[1][1]]),max([selection[0][1],selection[1][1]])): 
-        if direction in ['left','right']: pass
+            if PieceAt(selection[0][0], y): jumpsPiece = True
+            elif not board[y][selection[0][0]]: crossesEmpty: True
+        if direction in ['left','right']: 
+          for x in range(min([selection[0][0],selection[1][0]]),max([selection[0][0],selection[1][0]])): 
+            if PieceAt(x, selection[0][1]): jumpsPiece = True
+            elif not board[selection[0][1]][x]: crossesEmpty: True
         if direction == 'up-left': pass
         if direction == 'up-right': pass
         if direction == 'down-left': pass
         if direction == 'down-right': pass
+        if ((not crossesEmpty) and (not jumpsPiece)) or \
+         (crossesEmpty and piece.canJumpEmpty) and (not jumpsPiece): piece.erase(); piece.move(selection[1]); piece.draw(); return
+        if: 
         
-        piece.erase(); piece.move(selection[1]); piece.draw(); return
         
         
         
