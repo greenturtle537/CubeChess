@@ -2,7 +2,7 @@ attackPath = ['up-right','up-left','down-left','down-right','up','down','left','
 movePath = attackPath
 pawnPromote = False
 canJumpPieces = False
-canJumpEmpty = True
+canJumpEmpties = True
 char = 'q'
 
 conditionalMovePath = []

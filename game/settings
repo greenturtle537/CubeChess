@@ -1,5 +1,5 @@
 {
-  "board": "square",
+  "board": "small",
   "setup": 0,
 
   "debugOnBoot": false

@@ -218,8 +218,8 @@ def GetPieceMove():
       if ((direction in piece.movePath) or (vector in piece.movePath) or (direction in CheckConditionals('move', piece)) or (vector in CheckConditionals('move', piece))) and (not PieceAt(selection[1][0], selection[1][1])[0]):
         crossesEmpty = jumpsPiece = False
         if direction in ['up','down']: 
-          for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
-            if PieceAt(selection[0][0], y): jumpsPiece = True
+          for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])+1): 
+            if PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1] != piece: jumpsPiece = True
             elif not board[y][selection[0][0]]: crossesEmpty: True
         if direction in ['left','right']: 
           for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
@@ -229,8 +229,25 @@ def GetPieceMove():
         if direction == 'up-right': pass
         if direction == 'down-left': pass
         if direction == 'down-right': pass
-        if ((not crossesEmpty) and (not jumpsPiece)) or ((crossesEmpty and piece.canJumpEmpty) and (not jumpsPiece)) or ((crossesEmpty and piece.canJumpEmpty) and (jumpsPiece and piece.canJumpPieces)) or ((not crossesEmpty) and (jumpsPiece and piece.canJumpPieces)): piece.erase(); piece.move(selection[1]); piece.draw()
 
+        def movePiece(): piece.erase(); piece.move(selection[1]); piece.draw()
+        
+        # if piece can jump empty and pieces than ignore results
+        if piece.canJumpEmpties and piece.canJumpPieces: movePiece(); return
+
+        canMove = True
+        if jumpsPiece: 
+          ttype.xyprint('jumps piece', 4, 32)
+          if not piece.canJumpPieces: canMove = False
+          
+        
+        if crossesEmpty: 
+          ttype.xyprint('crosses empty', 4, 33)
+          if not piece.canJumpEmpties
+          
+
+        sleep(1.5)
+        for i in range(32,34): ttype.clearline(i)
 
 
 
@@ -285,7 +302,7 @@ class piece:
     self.movePath = data.movePath
     self.pawnPromote = data.pawnPromote
     self.canJumpPieces = data.canJumpPieces
-    self.canJumpEmpty = data.canJumpEmpty
+    self.canJumpEmpties = data.canJumpEmpties
     self.char = (TeamColor1 if color-1 else TeamColor2) + data.char + ttype.t.normal
     self.id = data.char
     self.pos = [x, y]
@@ -320,12 +337,12 @@ class dummypiece:
     self.attackPath = self.movePath = []
     self.conditionalAttackPath = self.conditionalMovePath = []
     self.pawnPromote = False
-    self.canJumpPieces = self.canJumpEmpty = True
+    self.canJumpPieces = self.canJumpEmpties = True
     self.char = self.id = '⚠'
     self.pastMoves = [((63,63),-1,(63,63))]
 
   def __bool__(self): return False
-
+  def remove(self): pass
 
 
 
