@@ -100,7 +100,7 @@ def string2time(string):
 def cleaner():
   users = jload("users.json")
   print(users)
-  for user in users:
+  for user in list(users):
     alive = users[user]["keepalive"]
     dif = get_time() - string2time(alive)
     timeout = dif.total_seconds()
