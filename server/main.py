@@ -109,7 +109,12 @@ def cleaner():
       users.pop(user)
       jwrite("users.json", users)
   print(rooms)
-  #for room in list(rooms):
+  for room in list(rooms):
+    if rooms[room]["lifetime"]:
+      dif = get_time() - string2time(rooms[room]["lifetime"])
+      timeout = dif.total_seconds()
+      if timeout >= 5:
+        rooms.pop(room)
 
 
 def login(username, password):
