@@ -180,6 +180,8 @@ class ChessServer(BaseHTTPRequestHandler):
       roomsjson = jload("rooms.json")
       if username in userjson and room in roomsjson:
         userjson[username]["activity"] = room
+        jwrite("users.json", userjson)
+        self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
       else:
         self.wfile.write(
           bytes(json.dumps({"result": "User/Room not found"}), "utf-8"))
