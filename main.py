@@ -137,8 +137,8 @@ def SelectBoardSpace():
 
     # interact based on keypress
     if inkey == 'W': boardSelection[1] = 0
-    elif inkey == 'A': boardSelection[1] = len(board)-1
-    elif inkey == 'S': boardSelection[0] = 0
+    elif inkey == 'S': boardSelection[1] = len(board)-1
+    elif inkey == 'A': boardSelection[0] = 0
     elif inkey == 'D': boardSelection[0] = len(board[boardSelection[1]])-1
     elif inkey == 'w' and y > 0: boardSelection[1] -= 1
     elif inkey == 's' and y < len(board)-1: boardSelection[1] += 1
@@ -220,12 +220,15 @@ def GetPieceMove():
         crossed = [(-1,-1), dummypiece()]
         if direction in ['up','down']: 
           for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
-            if PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1] != piece: jumpsPiece = True; crossed[1] = PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1]
+            if PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1] != piece: crossed[1] = PieceAt(selection[0][0], y)[1] and PieceAt(selection[0][0], y)[1]
             elif not board[y][selection[0][0]]: crossesEmpty: True
+              
         if direction in ['left','right']: 
           for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
-            if PieceAt(x, selection[0][1]): jumpsPiece = True
-            elif not board[selection[0][1]][x]: crossesEmpty: True
+            ttype.xyprint(board[selection[0][1]][x], 10+10*x, 35)
+            if PieceAt(x, selection[0][1])[1] and PieceAt(x, selection[0][1])[1] != piece: jumpsPiece = True
+            # elif not board[selection[0][1]][x]: crossesEmpty: True
+            if board[selection[0][1]][x] == 0: crossesEmpty: True
         if direction == 'up-left': pass
         if direction == 'up-right': pass
         if direction == 'down-left': pass
@@ -244,12 +247,12 @@ def GetPieceMove():
           
         
         if crossesEmpty: 
-          ttype.xyprint('crosses empty', 4, 37)
+          ttype.xyprint('crosses empty', 4, 35)
           if not piece.canJumpEmpties: canMove = False
           
-
+        # if jumpsPiece or crossesEmpty:
         sleep(1.2)
-        for i in range(32,35): ttype.clearline(i)
+        for i in range(32,36): ttype.clearline(i)
 
         if canMove: movePiece()
 
@@ -344,9 +347,10 @@ class dummypiece:
     self.char = self.id = '⚠'
     self.pastMoves = [((63,63),-1,(63,63))]
 
+    self.pos = (-1299, 1258125)
+
   def __bool__(self): return False
   def remove(self): pass
-
 
 
 
