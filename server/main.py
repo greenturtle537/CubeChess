@@ -105,7 +105,7 @@ def cleaner():
     dif = get_time() - string2time(alive)
     timeout = dif.total_seconds()
     if timeout >= 5:
-      users.remove(user)
+      users.pop(user)
       jwrite("users.json", users)
 
 
