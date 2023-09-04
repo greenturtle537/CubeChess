@@ -168,7 +168,7 @@ class ChessServer(BaseHTTPRequestHandler):
           "keepalive": time2string(get_time()),
           "activity": "0"
         }
-        userjson[username].append(blank)
+        userjson[username] = blank
         jwrite("users.json", userjson)
         res["result"] = 1
       self.wfile.write(bytes(json.dumps(res), "utf-8"))
