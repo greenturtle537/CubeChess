@@ -99,6 +99,7 @@ def string2time(string):
 
 def cleaner():
   users = jload("users.json")
+  rooms = jload("rooms.json")
   print(users)
   for user in list(users):
     alive = users[user]["keepalive"]
@@ -107,6 +108,8 @@ def cleaner():
     if timeout >= 5:
       users.pop(user)
       jwrite("users.json", users)
+  print(rooms)
+  #for room in list(rooms):
 
 
 def login(username, password):
