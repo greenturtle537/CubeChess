@@ -122,22 +122,6 @@ def login(username, password):
   return ret
 
 
-def superlist_finder(superlist, target, key):
-  control = False
-  for item in superlist:
-    if item[key] == target:
-      control = item
-  return control
-
-
-def superlist_antifinder(superlist, target, key):
-  control = True
-  for item in superlist:
-    if item[key] == target:
-      control = False
-  return control
-
-
 class ChessServer(BaseHTTPRequestHandler):
 
   def do_GET(self):
@@ -163,12 +147,10 @@ class ChessServer(BaseHTTPRequestHandler):
       # 0 = Logged in
       # Interpret strings as chat room signatures
       if not username in userjson.keys():
-        blank = {
-          "name": username,
+        userjson[username] = {
           "keepalive": time2string(get_time()),
           "activity": "0"
         }
-        userjson[username] = blank
         jwrite("users.json", userjson)
         res["result"] = 1
       self.wfile.write(bytes(json.dumps(res), "utf-8"))
@@ -195,8 +177,6 @@ class ChessServer(BaseHTTPRequestHandler):
         jwrite("users.json", userjson)
         self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
       else:
-        print(username)
-        print(userjson)
         self.wfile.write(bytes(json.dumps({"result": ":c"}), "utf-8"))
 
   def do_POST(self):
@@ -213,7 +193,6 @@ class ChessServer(BaseHTTPRequestHandler):
     self.send_header("Content-type", "text/json")
     self.end_headers()
     if self.path == "/addpost":
-      handle_image(post_data)
       self.wfile.write(bytes(json.dumps({"success": 1}), "utf-8"))
 
 
