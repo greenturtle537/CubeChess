@@ -101,7 +101,7 @@ def cleaner():
   users = jload("users.json")
   print(users)
   for user in users:
-    alive = user["keepalive"]
+    alive = users[user]["keepalive"]
     dif = get_time() - string2time(alive)
     timeout = dif.total_seconds()
     if timeout >= 5:
@@ -162,13 +162,13 @@ class ChessServer(BaseHTTPRequestHandler):
       # Number activities are hardcoded as follows
       # 0 = Logged in
       # Interpret strings as chat room signatures
-      if superlist_antifinder(userjson, username, "name"):
+      if not username in userjson.keys():
         blank = {
           "name": username,
           "keepalive": time2string(get_time()),
           "activity": "0"
         }
-        userjson.append(blank)
+        userjson[username].append(blank)
         jwrite("users.json", userjson)
         res["result"] = 1
       self.wfile.write(bytes(json.dumps(res), "utf-8"))
@@ -180,12 +180,18 @@ class ChessServer(BaseHTTPRequestHandler):
       self.wfile.write(
         bytes(json.dumps({"result": time2string(get_time())}), "utf-8"))
 
+    if p == "/rooms":
+      self.wfile.write(bytes(json.dumps(jload("rooms.json")), "utf-8"))
+
+    #if p == "/joinroom":
+    #  username = query_components["username"]
+    #  userjson = jload("users.json")
+
     if p == "/keepalive":
       username = query_components["username"]
       userjson = jload("users.json")
-      control = superlist_finder(userjson, username, "name")
-      if control:
-        control["keepalive"] = time2string(get_time())
+      if username in userjson:
+        userjson[username]["keepalive"] = time2string(get_time())
         jwrite("users.json", userjson)
         self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
       else:
