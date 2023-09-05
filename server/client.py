@@ -2,6 +2,10 @@ import requests
 import base62
 from time import sleep
 import kbhit
+from timer import RepeatedTimer
+
+print("You have connected to GlitchChat")
+username = input("Please enter your username: ")
 
 
 def cls():
@@ -10,10 +14,6 @@ def cls():
 
 def en(input):
   return base62.encodebytes(bytes(input, "utf-8"))
-
-
-print("You have connected to GlitchChat")
-username = input("Please enter your username: ")
 
 
 def users():
@@ -49,7 +49,11 @@ def cleaner():
     buffer.pop(0)
 
 
-while req["result"]:
-  write(keepalive(username))
-  sleep(0.5)
-  cleaner()
+rt = RepeatedTimer(0.1, cleaner)  # it auto-starts, no need of rt.start()
+try:
+  while req["result"]:
+    write(keepalive(username))
+    sleep(0.5)
+
+finally:
+  rt.stop()
