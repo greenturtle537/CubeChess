@@ -235,7 +235,7 @@ def GetPieceMove():
           for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
             for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
               if PieceAt(x, y)[1]: jumpsPiece = True
-              if not board[y][selection[0][0]]: crossesEmpty = True
+              if not board[y][x]: crossesEmpty = True
 
       
 
@@ -266,8 +266,9 @@ def GetPieceMove():
             if direction in ['up-left', 'up-right', 'down-left', 'down-right']: 
               for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
                 for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
+                  
                   if PieceAt(x, y)[1]: jumpsPiece = True
-                  if not board[y][selection[0][0]]: crossesEmpty = True
+                  if not board[y][x]: crossesEmpty = True
     
           
     
