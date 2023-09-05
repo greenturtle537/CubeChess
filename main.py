@@ -128,9 +128,6 @@ def SelectBoardSpace():
      
     ttype.xyprint(f'{ttype.t.rgb(0,255,255)}╭ ╮', 6+10*x, 2+4*y); ttype.xyprint(f'{ttype.t.rgb(0,255,255)}╰ ╯', 6+10*x, 4+4*y)
 
-    # # get a keypress
-    # inkey = ttype.RestrictedInkey(['w', 'a', 's', 'd', 'e', ' ','\n', 'r', 'W', 'A', 'S', 'D'])
-    # # get a keypress
       
     if selectorStyle == 'classic': inkey = ttype.RestrictedInkey(['w', 'a', 's', 'd', 'e', ' ','\n', 'r', 'W', 'A', 'S', 'D'])
     elif selectorStyle == 'improved': inkey = ttype.RestrictedInkey(['q', 'w', 'e', 'a', 'd', 'z', 'x', 'c', 'Q', 'W', 'E', 'A', 'D', 'Z', 'X', 'C', 'f', '\n', ' '])
@@ -154,7 +151,7 @@ def SelectBoardSpace():
       elif inkey == 'w' and y > 0: boardSelection[1] -= 1
       elif inkey == 's' and y < len(board)-1: boardSelection[1] += 1
       elif inkey == 'a' and x > 0: boardSelection[0] -= 1
-      elif inkey == 'd' and x < boardWidth: boardSelection[0] += 1
+      elif inkey == 'd' and x < boardWidth-1: boardSelection[0] += 1
       elif inkey == 'r': ttype.clear(); PrintBoard(); DrawPieces()
 
 
@@ -350,7 +347,7 @@ class Board:
   def _defvars(self): self.array = board
   def PieceAt(self, x: int, y: int) -> tuple[bool, piece]: return PieceAt(x,y)
   def TileAt(self, x: int, y: int) -> int: return board[y][x]
-  def IsTileAT(self, x: int, y: int) -> bool: return board[y][x] > 0
+  def IsTileAt(self, x: int, y: int) -> bool: return board[y][x] > 0
 Board = Board()
 
 # game class stores generic game data for custom pieces

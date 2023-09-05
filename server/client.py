@@ -45,6 +45,7 @@ buffer = []
 
 def write(message):
   buffer.append(message)
+  cleaner()
 
 
 def cleaner():
@@ -62,21 +63,15 @@ def cleaner():
     buffer.pop(0)
 
 
-rt = RepeatedTimer(0.5, cleaner)
-rt2 = RepeatedTimer(0.5, keepalive(username))
-rt.start()
-rt2.start()
-try:
-  kb = KBHit()
-  ''' while True:
-   if kb.kbhit():
-      c = kb.getch()
-      if ord(c) == 27:  # ESC
-        break
-      if ord(c) == 8:  #Backspace
-        command = command[0:len(command) - 2:]
-      else:
-        command = command + c'''
-
-finally:
-  rt.stop()
+kb = KBHit()
+while True:
+  if kb.kbhit():
+    c = kb.getch()
+    if ord(c) == 27:  # ESC
+      break
+    if ord(c) == 8:  #Backspace
+      command = command[0:len(command) - 2:]
+    else:
+      command = command + c
+  write(keepalive(username))
+  sleep(0.5)
