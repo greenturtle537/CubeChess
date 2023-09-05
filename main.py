@@ -272,11 +272,11 @@ def GetPieceMove():
             if not board[selection[0][1]][x]: crossesEmpty = True
         
         if direction in ['up-left', 'up-right', 'down-left', 'down-right']: 
-          for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
-            for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
-              if PieceAt(x, y)[1]: jumpsPiece = True
-              if not board[y][x]: crossesEmpty = True
-
+          ymod = -1 if 'up' in direction else 1
+          xmod = -1 if 'left' in direction else 1
+          for i in range(1,max([selection[0][0], selection[1][0]])-min([selection[0][0], selection[1][0]])):
+            if PieceAt(piece.pos[0]+i*xmod, piece.pos[1]+i*ymod)[1]: jumpsPiece = True
+            if not board[piece.pos[1]+i*ymod][piece.pos[0]+i*xmod]: crossesEmpty: True
 
         canMove = True
         if jumpsPiece and not piece.canJumpPieces: canMove = False
@@ -304,13 +304,12 @@ def GetPieceMove():
                 if not board[selection[0][1]][x]: crossesEmpty = True
             
             if direction in ['up-left', 'up-right', 'down-left', 'down-right']: 
-              for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
-                for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
-                  
-                  if PieceAt(x, y)[1]: jumpsPiece = True
-                  if not board[y][x]: crossesEmpty = True
+              ymod = -1 if 'up' in direction else 1
+              xmod = -1 if 'left' in direction else 1
+              for i in range(1,max([selection[0][0], selection[1][0]])-min([selection[0][0], selection[1][0]])):
+                if PieceAt(piece.pos[0]+i*xmod, piece.pos[1]+i*ymod)[1]: jumpsPiece = True
+                if not board[piece.pos[1]+i*ymod][piece.pos[0]+i*xmod]: crossesEmpty: True
 
-    
             canMove = True
             if jumpsPiece and not piece.canJumpPieces: canMove = False
             if crossesEmpty and not piece.canJumpEmpties: canMove = False
