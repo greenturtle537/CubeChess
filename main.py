@@ -250,7 +250,32 @@ def GetPieceMove():
       elif ((direction in piece.attackPath) or (vector in piece.attackPath) or (direction in CheckConditionals('attk', piece)) or (vector in CheckConditionals('attk', piece))) and (PieceAt(selection[1][0], selection[1][1])[0]):
         for p in Pieces:
           if tuple(p.pos) == tuple(selection[1]) and p != piece: 
-            piece.erase(); piece.move(selection[1]); piece.draw(); p.remove(); return
+            if piece.canJumpEmpties and piece.canJumpPieces: movePiece(); return
+            
+            crossesEmpty = jumpsPiece = False
+            if direction in ['up','down']: 
+              for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
+                if PieceAt(selection[0][0], y)[1]: jumpsPiece = True
+                if not board[y][selection[0][0]]: crossesEmpty = True
+                  
+            if direction in ['left','right']: 
+              for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
+                if PieceAt(x, selection[0][1])[1]: jumpsPiece = True
+                if not board[y][selection[0][0]]: crossesEmpty = True
+            
+            if direction in ['up-left', 'up-right', 'down-left', 'down-right']: 
+              for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
+                for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
+                  if PieceAt(x, y)[1]: jumpsPiece = True
+                  if not board[y][selection[0][0]]: crossesEmpty = True
+    
+          
+    
+            canMove = True
+            if jumpsPiece and not piece.canJumpPieces: canMove = False
+            if crossesEmpty and not piece.canJumpEmpties: canMove = False
+    
+            if canMove: movePiece()
 
 
 
