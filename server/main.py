@@ -227,7 +227,7 @@ class ChessServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
   webServer = HTTPServer((hostName, serverPort), ChessServer)
-  rt = RepeatedTimer(1, cleaner)  # it auto-starts, no need of rt.start()
+  rt = RepeatedTimer(1, cleaner)  # it no auto-starts, yes need of rt.start()
   rt.start()
   try:
     print("Server started http://%s:%s" % (hostName, serverPort))

@@ -13,6 +13,11 @@ username = input("Please enter your username: ")
 rows = 30
 command = ""
 
+r = requests.get("http://glitchtech.top:8/connect",
+                 params={"username": username})
+result = r.json()
+print(result)
+
 
 def cls():
   os.system('cls' if os.name == 'nt' else 'clear')
@@ -31,14 +36,9 @@ def users():
 def keepalive(userid):
   r = requests.get("http://glitchtech.top:8/keepalive",
                    params={"username": userid})
-  req = r.json()
-  return req
+  result = r.json()
 
 
-r = requests.get("http://glitchtech.top:8/connect",
-                 params={"username": username})
-req = r.json()
-print(req)
 #Frameloop sequence ahead, todo error handling
 buffer = []
 
@@ -62,12 +62,14 @@ def cleaner():
     buffer.pop(0)
 
 
-rt = RepeatedTimer(0.2, cleaner)  # it auto-starts, no need of rt.start()
-rt2 = RepeatedTimer(0.5, write(keepalive(username)))
+rt = RepeatedTimer(0.5, cleaner)
+rt2 = RepeatedTimer(0.5, keepalive(username))
+rt.start()
+rt2.start()
 try:
   kb = KBHit()
-  '''while req["result"]:
-    if kb.kbhit():
+  ''' while True:
+   if kb.kbhit():
       c = kb.getch()
       if ord(c) == 27:  # ESC
         break
