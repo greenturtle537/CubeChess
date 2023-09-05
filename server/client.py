@@ -67,9 +67,13 @@ def cleaner():
     buffer.pop(0)
 
 
+def newmsg(username):
+  write(keepalive(username))
+
+
 def ping(username):
   if scheduler.empty():
-    scheduler.enter(0.5, 1, keepalive, (username))
+    scheduler.enter(0.5, 1, newmsg, (username, ))
     scheduler.run()
 
 
@@ -83,4 +87,3 @@ while True:
       command = command[0:len(command) - 2:]
     else:
       command = command + c
-  write(keepalive(username))
