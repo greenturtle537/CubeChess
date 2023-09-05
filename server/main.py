@@ -163,6 +163,16 @@ class ChessServer(BaseHTTPRequestHandler):
         res["result"] = 1
       self.wfile.write(bytes(json.dumps(res), "utf-8"))
 
+    if p == "/makeroom":
+      room = query_components["room"]
+      roomsjson = jload("rooms.json")
+      res = {"result": 0}
+      if not room in roomsjson.keys():
+        roomsjson[room] = {"lifetime": False, "filter": False, "length": 50}
+        jwrite("rooms.json", roomsjson)
+        res["result"] = 1
+      self.wfile.write(bytes(json.dumps(res), "utf-8"))
+
     if p == "/users":
       self.wfile.write(bytes(json.dumps(jload("users.json")), "utf-8"))
 
