@@ -387,11 +387,11 @@ class piece:
   def draw(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])
   def remove(self): self.erase(); Pieces.remove(self)
   def promote(self): 
-    ttype.xyprint('promote to: ', 4, 30)
-    for i in range(len(self.promotesTo)): ttype.xyprint(self.promotesTo[i], 16+i*2, 30)
+    ttype.xyprint('promote to: ', 4, len(board)*4+3)
+    for i in range(len(self.promotesTo)): ttype.xyprint(self.promotesTo[i], 16+i*2, len(board)*4+3)
     inkey = ttype.RestrictedInkey([str(i) for i in range(1,len(self.promotesTo)+1)])
     self.__init__(self.pos[0], self.pos[1], PieceById[self.promotesTo[int(inkey)-1]], self.color, self.pastMoves)
-    ttype.clearline(30)
+    ttype.clearline(len(board)*4+3)
   def move(self, newPos):
     oldPos = self.pos
     self.pos = newPos

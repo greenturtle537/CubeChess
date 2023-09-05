@@ -25,9 +25,9 @@ conditionalAttackPath = []
 
 def onMove(self, game, board, pieces, oldPos, newPos): 
   # en passant
-  if (abs(self.pastMoves[-1][2][0]) + abs(self.pastMoves[-1][2][1])) > 1 and abs(self.pastMoves[-1][2][1]) < 2 and board.PieceAt(newPos[0], newPos[1]+(-1 if self.color-1 else 1))[1].pastMoves[-1][1]:  p = board.PieceAt(self.pos[0], self.pos[1]+(-1 if self.color-1 else 1))[1]; p.erase(); p.remove()
+  if (abs(self.pastMoves[-1][2][0]) + abs(self.pastMoves[-1][2][1])) > 1 and abs(self.pastMoves[-1][2][1]) < 2 and board.PieceAt(newPos[0], newPos[1]+(-1 if self.color-1 else 1))[1].pastMoves[-1][1] and len(board.PieceAt(newPos[0], newPos[1]+(-1 if self.color-1 else 1))[1].pastMoves) == 2:  p = board.PieceAt(self.pos[0], self.pos[1]+(-1 if self.color-1 else 1))[1]; p.erase(); p.remove()
   # promotion
-  if board.TileAt(newPos[0], newPos[1]) in [2,3]: self.promote() 
+  if board.TileAt(newPos[0], newPos[1]) == (3 if self.color-1 else 2): self.promote() 
 
 def onAttacked(self): self.remove(); return 'move'
     
