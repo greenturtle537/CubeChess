@@ -212,10 +212,19 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/keepalive":
       username = query_components["username"]
       userjson = jload("users.json")
+      newmsgs = []
       if username in userjson:
+        lastvisit = string2time(userjson[username]["keepalive"])
         userjson[username]["keepalive"] = time2string(get_time())
+        if not isinstance(userjson[username]["activity"], numbers.Number):
+          activeroom = jload("rooms/%s.json" % userjson[username]["activity"])
+          for i in activeroom:
+            dif = string2time(i["timestamp"]) - lastvisit
+            if dif > 0:
+              newmsgs.append(i)
+
         jwrite("users.json", userjson)
-        self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
+        self.wfile.write(bytes(json.dumps(newmsgs), "utf-8"))
       else:
         self.wfile.write(
           bytes(json.dumps({"result": "Not logged in"}), "utf-8"))
