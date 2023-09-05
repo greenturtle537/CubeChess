@@ -277,7 +277,6 @@ def GetPieceMove():
               if PieceAt(x, y)[1]: jumpsPiece = True
               if not board[y][x]: crossesEmpty = True
 
-      
 
         canMove = True
         if jumpsPiece and not piece.canJumpPieces: canMove = False
@@ -310,8 +309,7 @@ def GetPieceMove():
                   
                   if PieceAt(x, y)[1]: jumpsPiece = True
                   if not board[y][x]: crossesEmpty = True
-    
-          
+
     
             canMove = True
             if jumpsPiece and not piece.canJumpPieces: canMove = False

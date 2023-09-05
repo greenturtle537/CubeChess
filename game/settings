@@ -1,6 +1,6 @@
 {
   "board": "small",
-  "setup": 0,
+  "setup": 1,
   "selectorStyle": "classic",
 
   "debugOnBoot": false
