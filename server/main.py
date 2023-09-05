@@ -58,8 +58,8 @@ def de(input_str):
   return base62.decodebytes(input_str).decode("utf-8")
 
 
-def jwrite(file, out_json):
-  outfile = open(file, "w")
+def jwrite(file, out_json, operation="w+"):
+  outfile = open(file, operation)
   json.dump(out_json, outfile, indent=2)
   outfile.close()
 
