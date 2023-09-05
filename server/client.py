@@ -6,12 +6,16 @@ from timer import RepeatedTimer
 import os
 from cursor import show_cursor
 from cursor import hide_cursor
+import time
+import sched
 
 print("You have connected to GlitchChat")
 username = input("Please enter your username: ")
 
 rows = 30
 command = ""
+
+scheduler = sched.scheduler(time.time, time.sleep)
 
 r = requests.get("http://glitchtech.top:8/connect",
                  params={"username": username})
@@ -63,6 +67,12 @@ def cleaner():
     buffer.pop(0)
 
 
+def ping(username):
+  if scheduler.empty():
+    scheduler.enter(0.5, 1, keepalive, (username))
+    scheduler.run()
+
+
 kb = KBHit()
 while True:
   if kb.kbhit():
@@ -74,4 +84,3 @@ while True:
     else:
       command = command + c
   write(keepalive(username))
-  sleep(0.5)
