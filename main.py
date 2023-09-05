@@ -216,34 +216,28 @@ def GetPieceMove():
       vector = (selection[1][0]-selection[0][0], selection[1][1]-selection[0][1])
       # moving code
       if ((direction in piece.movePath) or (vector in piece.movePath) or (direction in CheckConditionals('move', piece)) or (vector in CheckConditionals('move', piece))) and (not PieceAt(selection[1][0], selection[1][1])[0]):
+
+        def movePiece(): piece.erase(); piece.move(selection[1]); piece.draw()
+        if piece.canJumpEmpties and piece.canJumpPieces: movePiece(); return
         
         crossesEmpty = jumpsPiece = False
-        
         if direction in ['up','down']: 
           for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
-            pa = PieceAt(selection[0][0], y)[1]
-            if pa and pa != piece: jumpsPiece = True
+            if PieceAt(selection[0][0], y)[1]: jumpsPiece = True
             if not board[y][selection[0][0]]: crossesEmpty = True
               
         if direction in ['left','right']: 
           for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
-            pa = PieceAt(x, selection[0][1])[1]
-            if pa and pa != piece: jumpsPiece = True
+            if PieceAt(x, selection[0][1])[1]: jumpsPiece = True
             if not board[y][selection[0][0]]: crossesEmpty = True
         
         if direction in ['up-left', 'up-right', 'down-left', 'down-right']: 
           for x in range(min([selection[0][0],selection[1][0]])+1,max([selection[0][0],selection[1][0]])): 
             for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
-              pa = PieceAt(x, y)[1]
-            if pa and pa != piece: jumpsPiece = True
-            if not board[y][selection[0][0]]: crossesEmpty = True
+              if PieceAt(x, y)[1]: jumpsPiece = True
+              if not board[y][selection[0][0]]: crossesEmpty = True
 
       
-
-        def movePiece(): piece.erase(); piece.move(selection[1]); piece.draw()
-        
-        # if piece can jump empty and pieces than ignore results
-        if piece.canJumpEmpties and piece.canJumpPieces: movePiece(); return
 
         canMove = True
         if jumpsPiece and not piece.canJumpPieces: canMove = False
