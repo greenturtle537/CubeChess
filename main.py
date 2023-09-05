@@ -361,11 +361,11 @@ Game = Game()
 # global main game vars
 Pieces = []
 class piece:
-  def __init__(self, x, y, data, color):
+  def __init__(self, x, y, data, color, past=[]):
     Pieces.append(self)
     self.attackPath = data.attackPath
     self.movePath = data.movePath
-    self.pawnPromote = data.pawnPromote
+    self.canPromote = data.canPromote
     self.canJumpPieces = data.canJumpPieces
     self.canJumpEmpties = data.canJumpEmpties
     self.char = (TeamColor1 if color-1 else TeamColor2) + data.char + ttype.t.normal
@@ -374,9 +374,10 @@ class piece:
     self.color = color
     self.conditionalMovePath = data.conditionalMovePath
     self.conditionalAttackPath = data.conditionalAttackPath
-    self.pastMoves = [self.pos]
+    self.pastMoves = [self.pos] if not past else past
     self.onMove = data.onMove
     self.onAtk = data.onAttacked
+    self.promotesTo = data.promotesTo
 
 
     if self.color == 2: 
@@ -390,6 +391,12 @@ class piece:
   def erase(self): ttype.xyprint(' ', 7+10*self.pos[0], 3+4*self.pos[1])
   def draw(self): ttype.xyprint(self.char, 7+10*self.pos[0], 3+4*self.pos[1])
   def remove(self): self.erase(); Pieces.remove(self)
+  def promote(self): 
+    ttype.xyprint('promote to: ', 4, 30)
+    for i in range(len(self.promotesTo)): ttype.xyprint(self.promotesTo[i], 16+i*2, 30)
+    inkey = ttype.RestrictedInkey([str(i) for i in range(1,len(self.promotesTo)+1)])
+    self.__init__(self.pos[0], self.pos[1], PieceById[self.promotesTo[int(inkey)-1]], self.color, self.pastMoves)
+    ttype.clearline(30)
   def move(self, newPos):
     oldPos = self.pos
     self.pos = newPos
@@ -403,7 +410,7 @@ class dummypiece:
   def __init__(self):
     self.attackPath = self.movePath = []
     self.conditionalAttackPath = self.conditionalMovePath = []
-    self.pawnPromote = False
+    self.canPromote = False
     self.canJumpPieces = self.canJumpEmpties = True
     self.char = self.id = '⚠'
     self.pastMoves = [((63,63),-1,(63,63))]
