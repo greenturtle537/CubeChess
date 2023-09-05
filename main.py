@@ -38,7 +38,7 @@ def LoadSettings():
   data = json.GetDict('game/settings') # gets the settings file
   if data['debugOnBoot']: print(ttype.t.rgb(0,100,0))
   global selectorStyle
-  selectorStyle = data['selectorStyle'] if data['selectorStyle'] in ['classic','improved'] else 'classic'
+  selectorStyle = data['selectorStyle']
   global board, cornerBoard # global some variables for later use in other functions
   b = json.GetDict(f"game/modData/boards/{data['board']}.board") # loads the board file
   board = b['array'] # loads the array from the .board file
@@ -133,7 +133,8 @@ def SelectBoardSpace():
     # # get a keypress
       
     if selectorStyle == 'classic': inkey = ttype.RestrictedInkey(['w', 'a', 's', 'd', 'e', ' ','\n', 'r', 'W', 'A', 'S', 'D'])
-    else: inkey = ttype.RestrictedInkey(['q', 'w', 'e', 'a', 'd', 'z', 'x', 'c', 'Q', 'W', 'E', 'A', 'D', 'Z', 'X', 'C', 'f', '\n', ' '])
+    elif selectorStyle == 'improved': inkey = ttype.RestrictedInkey(['q', 'w', 'e', 'a', 'd', 'z', 'x', 'c', 'Q', 'W', 'E', 'A', 'D', 'Z', 'X', 'C', 'f', '\n', ' '])
+    elif selectorStyle == 'mixed': inkey = ttype.RestrictedInkey(['q', 'w', 'e', 'a', 'd', 'z', 's', 'c', 'Q', 'W', 'E', 'A', 'D', 'Z', 'S', 'C', '\n', ' '])
      
     # draw over where the cursor was
     try: 
@@ -143,6 +144,7 @@ def SelectBoardSpace():
 
     # draw where selected1 is (if it isn't None)
     if selected1 != None: ttype.xyprint(f'{ttype.t.rgb(0,180,255)}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); ttype.xyprint(f'{ttype.t.rgb(0,180,255)}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
+      
     # interact based on keypress
     if selectorStyle == 'classic':
       if inkey == 'W': boardSelection[1] = 0
@@ -180,7 +182,22 @@ def SelectBoardSpace():
           ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
           return [selected1, (x,y)]
         
+    elif selectorStyle == 'mixed':
+      if inkey in ['Q','W','E']: boardSelection[1] = 0
+      if inkey in ['Q','A','Z']: boardSelection[0] = 0
+      if inkey in ['E','D','C']: boardSelection[0] = boardWidth-1
+      if inkey in ['Z','S','C']: boardSelection[1] = len(board)-1
+      if inkey in ['q','w','e'] and boardSelection[1] > 0: boardSelection[1] -= 1
+      if inkey in ['q','a','z'] and boardSelection[0] > 0: boardSelection[0] -= 1
+      if inkey in ['e','d','c'] and boardSelection[0] < boardWidth-1: boardSelection[0] += 1
+      if inkey in ['z','s','c'] and boardSelection[1] < len(board)-1: boardSelection[1] += 1
     
+      if inkey in [' ','\n']: 
+        if selected1 == None: 
+          if board[y][x] in [1,2,3]: selected1 = (x,y)
+        elif board[y][x] in [1,2,3]: 
+          ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
+          return [selected1, (x,y)]
 
 
 
