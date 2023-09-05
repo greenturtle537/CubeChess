@@ -24,3 +24,6 @@ conditionalAttackPath = []
 
 def onMove(self, game, board, pieces, oldPos, newPos): 
   if (abs(self.pastMoves[-1][2][0]) + abs(self.pastMoves[-1][2][1])) > 1 and abs(self.pastMoves[-1][2][1]) < 2 and board.PieceAt(self.pos[0], self.pos[1]+(-1 if self.color-1 else 1))[1].pastMoves[-1][1] == game.turn-1: board.PieceAt(self.pos[0], self.pos[1]+(-1 if self.color-1 else 1))[1].remove()
+
+def onAttacked(self): self.remove(); return 'move'
+    

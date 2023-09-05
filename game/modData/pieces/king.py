@@ -8,3 +8,5 @@ char = 'k'
 conditionalMovePath = []
 conditionalAttackPath = []
 def onMove(self, game, board, pieces, oldPos, newPos): pass
+def onAttacked(self): self.remove(); return 'move'
+  

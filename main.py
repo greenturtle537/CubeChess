@@ -37,6 +37,8 @@ def LoadMods():
 def LoadSettings(): 
   data = json.GetDict('game/settings') # gets the settings file
   if data['debugOnBoot']: print(ttype.t.rgb(0,100,0))
+  global selectorStyle
+  selectorStyle = data['selectorStyle'] if data['selectorStyle'] in ['classic','improved'] else 'classic'
   global board, cornerBoard # global some variables for later use in other functions
   b = json.GetDict(f"game/modData/boards/{data['board']}.board") # loads the board file
   board = b['array'] # loads the array from the .board file
@@ -67,7 +69,10 @@ def LoadSettings():
         if board[y-1][x] in [1,2,3]: cornerBoard[y][x] += 0b0001
 
 
-
+  global boardWidth
+  boardWidth = 1
+  for y in range(len(board)):
+    if len(board[y]) > boardWidth: boardWidth = len(board[y])
 
 
 # a function to draw pieces
@@ -123,8 +128,12 @@ def SelectBoardSpace():
      
     ttype.xyprint(f'{ttype.t.rgb(0,255,255)}╭ ╮', 6+10*x, 2+4*y); ttype.xyprint(f'{ttype.t.rgb(0,255,255)}╰ ╯', 6+10*x, 4+4*y)
 
-    # get a keypress
-    inkey = ttype.RestrictedInkey(['w', 'a', 's', 'd', 'e', ' ','\n', 'r', 'W', 'A', 'S', 'D'])
+    # # get a keypress
+    # inkey = ttype.RestrictedInkey(['w', 'a', 's', 'd', 'e', ' ','\n', 'r', 'W', 'A', 'S', 'D'])
+    # # get a keypress
+      
+    if selectorStyle == 'classic': inkey = ttype.RestrictedInkey(['w', 'a', 's', 'd', 'e', ' ','\n', 'r', 'W', 'A', 'S', 'D'])
+    else: inkey = ttype.RestrictedInkey(['q', 'w', 'e', 'a', 'd', 'z', 'x', 'c', 'Q', 'W', 'E', 'A', 'D', 'Z', 'X', 'C', 'f', '\n', ' '])
      
     # draw over where the cursor was
     try: 
@@ -134,25 +143,42 @@ def SelectBoardSpace():
 
     # draw where selected1 is (if it isn't None)
     if selected1 != None: ttype.xyprint(f'{ttype.t.rgb(0,180,255)}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); ttype.xyprint(f'{ttype.t.rgb(0,180,255)}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
-
     # interact based on keypress
-    if inkey == 'W': boardSelection[1] = 0
-    elif inkey == 'S': boardSelection[1] = len(board)-1
-    elif inkey == 'A': boardSelection[0] = 0
-    elif inkey == 'D': boardSelection[0] = len(board[boardSelection[1]])-1
-    elif inkey == 'w' and y > 0: boardSelection[1] -= 1
-    elif inkey == 's' and y < len(board)-1: boardSelection[1] += 1
-    elif inkey == 'a' and x > 0: boardSelection[0] -= 1
-    elif inkey == 'd' and x < 7: boardSelection[0] += 1
-    elif inkey == 'r': ttype.clear(); PrintBoard(); DrawPieces()
+    if selectorStyle == 'classic':
+      if inkey == 'W': boardSelection[1] = 0
+      elif inkey == 'S': boardSelection[1] = len(board)-1
+      elif inkey == 'A': boardSelection[0] = 0
+      elif inkey == 'D': boardSelection[0] = len(board[boardSelection[1]])-1
+      elif inkey == 'w' and y > 0: boardSelection[1] -= 1
+      elif inkey == 's' and y < len(board)-1: boardSelection[1] += 1
+      elif inkey == 'a' and x > 0: boardSelection[0] -= 1
+      elif inkey == 'd' and x < boardWidth: boardSelection[0] += 1
+      elif inkey == 'r': ttype.clear(); PrintBoard(); DrawPieces()
 
-    if inkey in ['e',' ','\n']: 
-      if selected1 == None: 
-        if board[y][x] in [1,2,3]: selected1 = (x,y)
-      elif board[y][x] in [1,2,3]: 
-        ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
-        return [selected1, (x,y)]
-        
+
+      if inkey in ['e',' ','\n']: 
+        if selected1 == None: 
+          if board[y][x] in [1,2,3]: selected1 = (x,y)
+        elif board[y][x] in [1,2,3]: 
+          ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
+          return [selected1, (x,y)]
+     
+    elif selectorStyle == 'improved':
+      if inkey in ['Q','W','E']: boardSelection[1] = 0
+      if inkey in ['Q','A','Z']: boardSelection[0] = 0
+      if inkey in ['E','D','C']: boardSelection[0] = boardWidth-1
+      if inkey in ['Z','X','C']: boardSelection[1] = len(board)-1
+      if inkey in ['q','w','e'] and boardSelection[1] > 0: boardSelection[1] -= 1
+      if inkey in ['q','a','z'] and boardSelection[0] > 0: boardSelection[0] -= 1
+      if inkey in ['e','d','c'] and boardSelection[0] < boardWidth-1: boardSelection[0] += 1
+      if inkey in ['z','x','c'] and boardSelection[1] < len(board)-1: boardSelection[1] += 1
+    
+      if inkey in ['f', ' ','\n']: 
+        if selected1 == None: 
+          if board[y][x] in [1,2,3]: selected1 = (x,y)
+        elif board[y][x] in [1,2,3]: 
+          ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╭ ╮', 6+10*selected1[0], 2+4*selected1[1]); ttype.xyprint(f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯', 6+10*selected1[0], 4+4*selected1[1])
+          return [selected1, (x,y)]
         
     
 
@@ -252,6 +278,7 @@ def GetPieceMove():
           if tuple(p.pos) == tuple(selection[1]) and p != piece: 
             if piece.canJumpEmpties and piece.canJumpPieces: movePiece(); return
             
+            def movePiece(): piece.erase(); piece.move(selection[1]); piece.draw()
             crossesEmpty = jumpsPiece = False
             if direction in ['up','down']: 
               for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
@@ -276,8 +303,9 @@ def GetPieceMove():
             if jumpsPiece and not piece.canJumpPieces: canMove = False
             if crossesEmpty and not piece.canJumpEmpties: canMove = False
     
-            if canMove: movePiece()
-
+            if canMove: 
+              PieceAt(selection[1][0], selection[1][1])[1].remove()
+              movePiece()
 
 
 def ReversePieceDirection(dir):
@@ -332,6 +360,7 @@ class piece:
     self.conditionalAttackPath = data.conditionalAttackPath
     self.pastMoves = [self.pos]
     self.onMove = data.onMove
+    self.onAtk = data.onAttacked
 
 
     if self.color == 2: 
@@ -351,6 +380,7 @@ class piece:
     self.pastMoves.append((self.pos,Game.turn,(newPos[0]-oldPos[0], newPos[1]-oldPos[1])))
     self.onMove(self, Game, Board, Pieces, oldPos, newPos)
 
+  def getAttacked(self): return self.onAtk(self)
 
 
 class dummypiece:
