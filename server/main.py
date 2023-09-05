@@ -97,6 +97,15 @@ def string2time(string):
   return datetime.strptime(string, timestd)
 
 
+def chat(author, message):
+  obj = {
+    "timestamp": time2string(get_time()),
+    "author": author,
+    "message": message
+  }
+  return obj
+
+
 def cleaner():
   users = jload("users.json")
   rooms = jload("rooms.json")
@@ -157,10 +166,11 @@ class ChessServer(BaseHTTPRequestHandler):
       if not username in userjson.keys():
         userjson[username] = {
           "keepalive": time2string(get_time()),
-          "activity": "0"
+          "activity": 0
         }
         jwrite("users.json", userjson)
         res["result"] = 1
+
       self.wfile.write(bytes(json.dumps(res), "utf-8"))
 
     if p == "/makeroom":
@@ -170,7 +180,10 @@ class ChessServer(BaseHTTPRequestHandler):
       if not room in roomsjson.keys():
         roomsjson[room] = {"lifetime": False, "filter": False, "length": 50}
         jwrite("rooms.json", roomsjson)
-        res["result"] = 1
+        list = []
+        list.append(chat("SYSTEM", "%s room created" % room))
+        jwrite("rooms/%s.json" % room, list)
+        res["result"] = jload("rooms/%s.json" % room)
       self.wfile.write(bytes(json.dumps(res), "utf-8"))
 
     if p == "/users":
