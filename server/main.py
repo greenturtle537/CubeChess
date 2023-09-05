@@ -196,6 +196,20 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/rooms":
       self.wfile.write(bytes(json.dumps(jload("rooms.json")), "utf-8"))
 
+    if p == "/message":
+      username = query_components["username"]
+      message = query_components["message"]
+      userjson = jload("users.json")
+      if username in userjson and not isinstance(
+          userjson[username]["activity"], numbers.Number):
+        activeroom = jload("rooms/%s.json" % userjson[username]["activity"])
+        chatitem = chat(username, message)
+        activeroom.append(chatitem)
+        self.wfile.write(bytes(json.dumps(chatitem), "utf-8"))
+      else:
+        self.wfile.write(
+          bytes(json.dumps({"result": "User/Room not found"}), "utf-8"))
+
     if p == "/joinroom":
       username = query_components["username"]
       room = query_components["room"]
@@ -222,7 +236,6 @@ class ChessServer(BaseHTTPRequestHandler):
             dif = string2time(i["timestamp"]) - lastvisit
             if dif > 0:
               newmsgs.append(i)
-
         jwrite("users.json", userjson)
         self.wfile.write(bytes(json.dumps(newmsgs), "utf-8"))
       else:
