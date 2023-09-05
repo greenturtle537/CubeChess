@@ -414,6 +414,7 @@ class dummypiece:
 
   def __bool__(self): return False
   def remove(self): pass
+  def erase(self): pass
 
 
 
