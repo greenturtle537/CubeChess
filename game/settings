@@ -1,7 +1,7 @@
 {
   "board": "small",
   "setup": 0,
-  "selectorStyle": "mixed",
+  "selectorStyle": "classic",
 
   "debugOnBoot": false
 }

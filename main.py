@@ -291,11 +291,11 @@ def GetPieceMove():
 
       # attacking code
       elif ((direction in piece.attackPath) or (vector in piece.attackPath) or (direction in CheckConditionals('attk', piece)) or (vector in CheckConditionals('attk', piece))) and (PieceAt(selection[1][0], selection[1][1])[0]):
+        def movePiece(): piece.erase(); piece.move(selection[1]); piece.draw()
         for p in Pieces:
           if tuple(p.pos) == tuple(selection[1]) and p != piece: 
-            if piece.canJumpEmpties and piece.canJumpPieces: movePiece(); return
-            
-            def movePiece(): piece.erase(); piece.move(selection[1]); piece.draw()
+            if piece.canJumpEmpties and piece.canJumpPieces: PieceAt(selection[1][0], selection[1][1])[1].remove(); movePiece(); return
+  
             crossesEmpty = jumpsPiece = False
             if direction in ['up','down']: 
               for y in range(min([selection[0][1],selection[1][1]])+1,max([selection[0][1],selection[1][1]])): 
@@ -320,9 +320,8 @@ def GetPieceMove():
             if jumpsPiece and not piece.canJumpPieces: canMove = False
             if crossesEmpty and not piece.canJumpEmpties: canMove = False
     
-            if canMove: 
-              PieceAt(selection[1][0], selection[1][1])[1].remove()
-              movePiece()
+            if canMove: PieceAt(selection[1][0], selection[1][1])[1].remove(); movePiece()
+              
 
 
 def ReversePieceDirection(dir):
