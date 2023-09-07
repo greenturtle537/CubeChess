@@ -7,4 +7,5 @@ pieces/bishop
 pieces/queen
 pieces/king
 pieces/spider
-pieces/checkerPawn
+pieces/checkerpawn
+pieces/checkerking
