@@ -1,15 +1,12 @@
 import requests
 import base62
 from time import sleep
-from kbhit import KBHit
-from timer import RepeatedTimer
 import os
-from cursor import show_cursor
-from cursor import hide_cursor
 import time
-import sched
 import curses
 import curses.textpad
+from commands import trycommand
+from commands import docommand
 
 
 #curses routines
@@ -75,10 +72,6 @@ def refresh():
   stdscr.refresh()
 
 
-def newmsg(username):
-  write(keepalive(username))
-
-
 def ping(method, args):
   if scheduler.empty():
     scheduler.enter(0.5, 1, method, (args, ))
@@ -99,7 +92,6 @@ win = curses.newwin(1, curses.COLS - 10, curses.LINES - 2, 4)
 count = 2
 stdscr.nodelay(True)
 
-scheduler = sched.scheduler(time.time, time.sleep)
 start_curses(stdscr)
 buffer = []
 
@@ -110,15 +102,14 @@ center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓
 center_text("", curses.LINES - 3, "▓")
 stdscr.addstr(curses.LINES - 2, 0, "[$]: ")
 
-tb = curses.textpad.Textbox(win, insert_mode=True)
-
 stdscr.refresh()
 command = ""
 start = time.time()
+flag = 0
 
 while True:
+  # ----- Key Input handlers -----
   c = stdscr.getch()
-  #6text = tb.edit()
   #ping(counter, count)
   if c == 27:  # Codes to escape(esc)
     break  # Exit the while loop
@@ -131,28 +122,21 @@ while True:
     stdscr.addstr(curses.LINES - 2, 5, " " * len(command))
     stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
     write(command)
+    if len(command) > 0 and command[0] == "/":
+      if trycommand(command[1::]):
+        commandout = docommand(command[1::])
+        write(commandout)
+
     command = ""
   elif c > 31 and c <= 126:
     command = command + chr(c)
     stdscr.addstr(curses.LINES - 2, 5, command)
+  # ----- Repeated routine handlers -----
   if time.time() - start > 1:
     #write(str(count))
     count = count + 1
     start = time.time()
+  # ----- Single routine handlers -----
+
   stdscr.refresh()
 stop_curses(stdscr)
-
-#Frameloop sequence ahead, todo error handling
-'''
-kb = KBHit()
-while True:
-  if kb.kbhit():
-    c = kb.getch()
-    if ord(c) == 27:  # ESC
-      break
-    if ord(c) == 8:  #Backspace
-      command = command[0:len(command) - 2:]
-    else:
-      command = command + c
-  
-'''

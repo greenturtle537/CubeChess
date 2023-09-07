@@ -4,8 +4,16 @@
       {
         "id": "e6f201e9-04b1-42a2-b3c2-eb353b391800",
         "line": 57,
-        "version": 3679,
-        "index": 1033
+        "version": 4491,
+        "index": 1052
+      }
+    ],
+    "server/commands.py": [
+      {
+        "id": "fdf33a28-a273-49a0-81a3-154fe398e5c2",
+        "line": 3,
+        "version": 35,
+        "index": 35
       }
     ]
   }
