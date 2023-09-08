@@ -3,17 +3,17 @@
     "server/client.py": [
       {
         "id": "e6f201e9-04b1-42a2-b3c2-eb353b391800",
-        "line": 57,
-        "version": 4491,
-        "index": 1052
+        "line": 55,
+        "version": 4789,
+        "index": 984
       }
     ],
     "server/commands.py": [
       {
         "id": "fdf33a28-a273-49a0-81a3-154fe398e5c2",
-        "line": 3,
-        "version": 35,
-        "index": 35
+        "line": 1,
+        "version": 309,
+        "index": 0
       }
     ]
   }

@@ -5,8 +5,7 @@ import os
 import time
 import curses
 import curses.textpad
-from commands import trycommand
-from commands import docommand
+import cmds
 
 
 #curses routines
@@ -21,26 +20,6 @@ def stop_curses(instance):
   stdscr.keypad(False)
   curses.echo()
   curses.endwin()
-
-
-# requests routines
-def connect(username):
-  r = requests.get("http://glitchtech.top:8/connect",
-                   params={"username": username})
-  result = r.json()
-  return result
-
-
-def users():
-  r = requests.get("http://glitchtech.top:8/users")
-  req = r.json()
-  return req
-
-
-def keepalive(userid):
-  r = requests.get("http://glitchtech.top:8/keepalive",
-                   params={"username": userid})
-  result = r.json()
 
 
 # misc routines
@@ -123,8 +102,10 @@ while True:
     stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
     write(command)
     if len(command) > 0 and command[0] == "/":
-      if trycommand(command[1::]):
-        commandout = docommand(command[1::])
+      commandls = command.split("/")
+      commandls = commandls[1].split(" ")
+      if cmds.trycommand(commandls[0]):
+        commandout = cmds.docommand(commandls[0], commandls[1::])
         write(commandout)
 
     command = ""
