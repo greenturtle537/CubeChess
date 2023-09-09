@@ -187,7 +187,7 @@ class ChessServer(BaseHTTPRequestHandler):
         userjson[username]["activity"] = room
         jwrite("users.json", userjson)
         #self.wfile.write(bytes(json.dumps(userjson), "utf-8")) Cannot remember if this was for debugging
-        self.wfile.write(bytes({"result": 1}, "utf-8"))
+        self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
       else:
         self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))
 
