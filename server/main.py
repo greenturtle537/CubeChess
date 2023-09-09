@@ -176,7 +176,8 @@ class ChessServer(BaseHTTPRequestHandler):
         self.wfile.write(
           bytes(json.dumps({"result": "User/Room not found"}), "utf-8"))
 
-    if p == "/joinroom":
+    if p == "/join":
+      # Result 0 indicates "User/Room not found"
       username = query_components["username"]
       room = query_components["room"]
       userjson = jload("users.json")
@@ -184,10 +185,9 @@ class ChessServer(BaseHTTPRequestHandler):
       if username in userjson and room in roomsjson:
         userjson[username]["activity"] = room
         jwrite("users.json", userjson)
-        self.wfile.write(bytes(json.dumps(userjson), "utf-8"))
+        self.wfile.write(bytes({"result": json.dumps(userjson)}, "utf-8"))
       else:
-        self.wfile.write(
-          bytes(json.dumps({"result": "User/Room not found"}), "utf-8"))
+        self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))
 
     if p == "/keepalive":
       username = query_components["username"]

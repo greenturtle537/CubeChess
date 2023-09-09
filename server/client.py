@@ -104,6 +104,8 @@ def help(*args):
 # requests routines
 def connect(*args):
   username = args[0]
+  if username[0] == "local":
+    return "This username is reserved"
   r = requests.get("http://glitchtech.top:8/connect",
                    params={"username": username})
   result = r.json()
@@ -116,6 +118,22 @@ def connect(*args):
       "This username is already in use",
       "Please wait a few seconds before trying again"
     ]
+
+
+def join(*args):
+  if localusername == "local":
+    return "Connect to the server first"
+  room = args[0]
+  r = requests.get("http://glitchtech.top:8/join",
+                   params={
+                     "username": localusername,
+                     "room": room
+                   })
+  result = r.json()
+  if not result["result"]:
+    return "User/Room not found"
+  else:
+    return "Connected to %s" % room[0]
 
 
 def users():
@@ -132,10 +150,7 @@ def keepalive(userid):
 
 
 #Keep at bottom
-functionmap = {
-  "connect": connect,
-  "help": help,
-}
+functionmap = {"connect": connect, "help": help, "join": join}
 
 #Code entry
 
@@ -189,9 +204,8 @@ while True:
     command = command + chr(c)
     stdscr.addstr(curses.LINES - 2, 5, command)
   # ----- Repeated routine handlers -----
-  if time.time() - start > 1:
-    #write(str(count))
-    count = count + 1
+  if time.time() - start > 1 and localusername != "local":
+    keepalive(localusername)
     start = time.time()
   # ----- Single routine handlers -----
 
