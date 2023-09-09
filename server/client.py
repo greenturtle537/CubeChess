@@ -5,7 +5,7 @@ import os
 import time
 import curses
 import curses.textpad
-import cmds
+from datetime import datetime
 
 
 #curses routines
@@ -38,30 +38,104 @@ def center_text(text, y, pad="", attr=curses.A_NORMAL):
   stdscr.addstr(y, num, text, attr)
 
 
-def write(message):
-  buffer.append(message)
+def time2string(time):
+  return datetime.strftime(time, timestd)
+
+
+def get_time():
+  return datetime.now()
+
+
+def clean_time(time):
+  return time[9:17:]
+
+
+def string2time(string):
+  return datetime.strptime(string, timestd)
+
+
+def cl_write(messages):
+  write("CLIENT", clean_time(time2string(get_time())), messages)
+
+
+def lc_write(messages):
+  write(localusername, clean_time(time2string(get_time())), messages)
+
+
+def write(author, timestamp, messages):
+  if not isinstance(messages, list):
+    messages = [messages]
+  for message in messages:
+    #buffer.append(str(message)[:curses.COLS - 1:])
+    buffer.append(
+      "[%s]<%s> %s" %
+      (timestamp, author, str(message)))  #Force sanitize all output
   refresh()
 
 
 def refresh():
   while len(buffer) > curses.LINES - 6:
     buffer.pop(0)
-  for i in buffer:
-    stdscr.addstr(buffer.index(i) + 3, 0, i)
+  for i in range(len(buffer)):
+    stdscr.addstr(i + 3, 0, buffer[i])
+  stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
   stdscr.refresh()
 
 
-def ping(method, args):
-  if scheduler.empty():
-    scheduler.enter(0.5, 1, method, (args, ))
-    scheduler.run()
+def trycommand(commandtext):
+  if commandtext in list(functionmap):
+    #functionmap[commandtext]()
+    return True
+  else:
+    return False
 
 
-def counter(placeholder=""):
-  global count
-  count = count + 1
-  write(str(count))
+def docommand(commandtext, *args):
+  return functionmap[commandtext](*args)
 
+
+def help(*args):
+  helplist = [
+    "/help ~ Display this text", "/connect <username> ~ Connect to the server"
+  ]
+  return helplist
+
+
+# requests routines
+def connect(*args):
+  username = args[0]
+  r = requests.get("http://glitchtech.top:8/connect",
+                   params={"username": username})
+  result = r.json()
+  if result["result"] == 1:
+    global localusername
+    localusername = username[0]
+    return "Connected as %s" % localusername
+  else:
+    return [
+      "This username is already in use",
+      "Please wait a few seconds before trying again"
+    ]
+
+
+def users():
+  r = requests.get("http://glitchtech.top:8/users")
+  req = r.json()
+  return req
+
+
+def keepalive(userid):
+  r = requests.get("http://glitchtech.top:8/keepalive",
+                   params={"username": userid})
+  result = r.json()
+  return result
+
+
+#Keep at bottom
+functionmap = {
+  "connect": connect,
+  "help": help,
+}
 
 #Code entry
 
@@ -73,9 +147,11 @@ stdscr.nodelay(True)
 
 start_curses(stdscr)
 buffer = []
+timestd = "%m:%d:%y:%H:%M:%S:%f"
+localusername = "local"
 
 center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
-center_text("| GlitchChat v1.0 |", 1, "▓", curses.A_STANDOUT)
+center_text("| GlitchChat v0.2 |", 1, "▓", curses.A_STANDOUT)
 center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓", curses.A_REVERSE)
 
 center_text("", curses.LINES - 3, "▓")
@@ -85,7 +161,7 @@ stdscr.refresh()
 command = ""
 start = time.time()
 flag = 0
-
+cl_write("Welcome to GlitchChat, type /help to begin")
 while True:
   # ----- Key Input handlers -----
   c = stdscr.getch()
@@ -100,13 +176,13 @@ while True:
   elif c == curses.KEY_ENTER or c == 13 or c == 10:  # Accept carriage return and line feed
     stdscr.addstr(curses.LINES - 2, 5, " " * len(command))
     stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
-    write(command)
+    lc_write(command)
     if len(command) > 0 and command[0] == "/":
       commandls = command.split("/")
       commandls = commandls[1].split(" ")
-      if cmds.trycommand(commandls[0]):
-        commandout = cmds.docommand(commandls[0], commandls[1::])
-        write(commandout)
+      if trycommand(commandls[0]):
+        commandout = docommand(commandls[0], commandls[1::])
+        cl_write(commandout)
 
     command = ""
   elif c > 31 and c <= 126:
