@@ -130,10 +130,10 @@ def join(*args):
                      "room": room
                    })
   result = r.json()
-  if not result["result"]:
-    return "User/Room not found"
-  else:
+  if result["result"] == 1:
     return "Connected to %s" % room[0]
+  else:
+    return "User/Room not found"
 
 
 def users():
