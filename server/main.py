@@ -202,7 +202,7 @@ class ChessServer(BaseHTTPRequestHandler):
           activeroom = jload("rooms/%s.json" % userjson[username]["activity"])
           for i in activeroom:
             dif = string2time(i["timestamp"]) - lastvisit
-            if dif > 0:
+            if dif.total_seconds() > 0:
               newmsgs.append(i)
         jwrite("users.json", userjson)
         self.wfile.write(bytes(json.dumps(newmsgs), "utf-8"))
