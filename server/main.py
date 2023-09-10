@@ -127,7 +127,7 @@ class ChessServer(BaseHTTPRequestHandler):
       # Result 1: Connected
 
       #username = de(query_components["username"])
-      username = de(query_components["username"])
+      username = query_components["username"]
       userjson = jload("users.json")
       res = {"result": 0}
       # Number activities are hardcoded as follows
