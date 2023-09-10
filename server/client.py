@@ -1,5 +1,4 @@
 import requests
-import base62
 import os
 import time
 import curses
@@ -95,7 +94,7 @@ def refresh():
   while len(buffer) > curses.LINES - 6:
     buffer.pop(0)
   for i in range(len(buffer)):
-    stdscr.addstr(i + 3, 0, buffer[i])
+    stdscr.addstr(i + 3, 0, buffer[i].ljust(curses.COLS))
   stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
   stdscr.refresh()
 
@@ -126,7 +125,7 @@ def connect(*args):
   if username[0] == "local":
     return "This username is reserved"
   r = requests.get("http://glitchtech.top:8/connect",
-                   params={"username": username})
+                   params={"username": en(username)})
   result = r.json()
   if result["result"] == 1:
     global localusername
@@ -177,7 +176,7 @@ def users(*args):
   usercount = len(res)
   userlist = [
     "There are %s users online" % usercount,
-    "Username    Last Updated    Activity"
+    "Username        Last Updated        Activity"
   ]
   for user in list(res):
     if isinstance(res[user]["activity"], numbers.Number):
@@ -185,7 +184,7 @@ def users(*args):
     else:
       activity = res[user]["activity"]
     time = clean_time(res[user]["keepalive"])
-    userlist.append("%s%s%s" % (user.ljust(12), time.ljust(16), activity))
+    userlist.append("%s%s%s" % (user.ljust(16), time.ljust(20), activity))
   return userlist
 
 
