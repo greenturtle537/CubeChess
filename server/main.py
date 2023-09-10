@@ -21,7 +21,12 @@ def in_index(mylist, target):
 
 
 def base64_decode(string):
-  return base64.urlsafe_b64decode((string + (b"=" * (4 - (len(string) % 4)))))
+  a = 4
+  b = len(string) % a
+  c = 4 - b
+  d = b"=" * c
+  e = string + d
+  return base64.urlsafe_b64decode(e)
 
 
 def de(input_str):
