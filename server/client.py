@@ -126,7 +126,7 @@ def connect(*args):
   if username[0] == "local":
     return "This username is reserved"
   r = requests.get("http://glitchtech.top:8/connect",
-                   params={"username": username})
+                   params={"username": en(username)})
   result = r.json()
   if result["result"] == 1:
     global localusername

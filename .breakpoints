@@ -1,13 +1,5 @@
 {
   "files": {
-    "server/client.py": [
-      {
-        "id": "e6f201e9-04b1-42a2-b3c2-eb353b391800",
-        "line": 39,
-        "version": 7737,
-        "index": 604
-      }
-    ],
     "server/commands.py": [
       {
         "id": "fdf33a28-a273-49a0-81a3-154fe398e5c2",
