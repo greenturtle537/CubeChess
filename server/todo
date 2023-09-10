@@ -1,3 +1,7 @@
-- Fix encoding
-- Clear old lines fully
-- 
+- Add room creation
+- More room settings
+- Room ownership
+- Modify room settings
+- Migrate project
+- Account creation
+- Add bio to rooms

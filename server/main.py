@@ -2,7 +2,6 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import base64
 from urllib.parse import urlparse
-import os
 from datetime import datetime
 from timer import RepeatedTimer
 import numbers
@@ -153,7 +152,16 @@ class ChessServer(BaseHTTPRequestHandler):
       roomsjson = jload("rooms.json")
       res = {"result": 0}
       if not room in roomsjson.keys():
-        roomsjson[room] = {"lifetime": False, "filter": False, "length": 50}
+        roomsjson[room] = {
+          "lifetime": False,
+          "filter": False,
+          "length": 50,
+          "owner": False,
+          "editable": True,
+          "motd": "This is a room",
+          "refresh": True
+          "refreshlen": 10
+        }
         jwrite("rooms.json", roomsjson)
         list = []
         list.append(chat("SYSTEM", "%s room created" % room))
@@ -190,6 +198,7 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/join":
       # Result 0 indicates "User/Room not found"
       # Result 1 indicates success
+      # Else message log
       username = de(query_components["username"])
       room = de(query_components["room"])
       userjson = jload("users.json")
@@ -198,7 +207,11 @@ class ChessServer(BaseHTTPRequestHandler):
         userjson[username]["activity"] = room
         jwrite("users.json", userjson)
         #self.wfile.write(bytes(json.dumps(userjson), "utf-8")) Cannot remember if this was for debugging
-        self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
+        if roomsjson[room]["refresh"]:
+          activeroom = jload("rooms/%s.json" % room)
+          self.wfile.write(bytes(json.dumps(activeroom), "utf-8"))
+        else:
+          self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
       else:
         self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))
 

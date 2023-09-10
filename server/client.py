@@ -87,14 +87,21 @@ def write(author, timestamp, messages):
     buffer.append(
       "[%s]<%s> %s" %
       (timestamp, author, str(message)))  #Force sanitize all output
-  refresh()
+  refresh(yoff)
 
 
-def refresh():
-  while len(buffer) > curses.LINES - 6:
-    buffer.pop(0)
-  for i in range(len(buffer)):
-    stdscr.addstr(i + 3, 0, buffer[i].ljust(curses.COLS))
+def refresh(y=0):
+  #while len(buffer) > curses.LINES - 6:
+  #  buffer.pop(0)
+  if len(buffer) - curses.LINES + 6 > 0:
+    tempbuffer = buffer[len(buffer) - curses.LINES + 6 - yoff::]
+  else:
+    tempbuffer = buffer
+  for i in range(curses.LINES - 6):
+    if len(tempbuffer) > i:
+      stdscr.addstr(i + 3, 0, tempbuffer[i].ljust(curses.COLS))
+    else:
+      stdscr.addstr(i + 3, 0, "".ljust(curses.COLS))
   stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
   stdscr.refresh()
 
@@ -152,7 +159,7 @@ def join(*args):
     global localroom
     localroom = room
     return "Connected to %s" % room
-  else:
+  elif result["result"] == 0:
     return "User/Room not found"
 
 
@@ -216,6 +223,8 @@ localusername = "local"
 localroom = "local"
 activitychart = {0: "Logged in"}
 
+yoff = 0
+
 center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
 center_text("| GlitchChat v0.2 |", 1, "▓", curses.A_STANDOUT)
 center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓", curses.A_REVERSE)
@@ -239,6 +248,14 @@ while True:
     stdscr.addstr(curses.LINES - 2, 5, command + " ")
     stdscr.addstr(curses.LINES - 2, 5,
                   command)  #Wastefully corrects cursor position
+  elif c == curses.KEY_UP:
+    if yoff < len(buffer) - curses.LINES + 6:
+      yoff = yoff + 1
+      refresh()
+  elif c == curses.KEY_DOWN:
+    if yoff > 0:
+      yoff = yoff - 1
+      refresh()
   elif (c == curses.KEY_ENTER or c == 13 or c
         == 10) and len(command) > 0:  # Accept carriage return and line feed
     stdscr.addstr(curses.LINES - 2, 5, " " * len(command))
