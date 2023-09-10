@@ -131,7 +131,21 @@ def join(*args):
                    })
   result = r.json()
   if result["result"] == 1:
+    localroom = room[0]
     return "Connected to %s" % room[0]
+  else:
+    return "User/Room not found"
+
+
+def message(msg):
+  r = requests.get("http://glitchtech.top:8/message",
+                   params={
+                     "username": localusername,
+                     "message": msg
+                   })
+  result = r.json()
+  if result["result"] == 1:
+    return msg
   else:
     return "User/Room not found"
 
@@ -164,6 +178,7 @@ start_curses(stdscr)
 buffer = []
 timestd = "%m:%d:%y:%H:%M:%S:%f"
 localusername = "local"
+localroom = "local"
 
 center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
 center_text("| GlitchChat v0.2 |", 1, "▓", curses.A_STANDOUT)
@@ -188,16 +203,21 @@ while True:
     stdscr.addstr(curses.LINES - 2, 5, command + " ")
     stdscr.addstr(curses.LINES - 2, 5,
                   command)  #Wastefully corrects cursor position
-  elif c == curses.KEY_ENTER or c == 13 or c == 10:  # Accept carriage return and line feed
+  elif (c == curses.KEY_ENTER or c == 13 or c
+        == 10) and len(command) > 0:  # Accept carriage return and line feed
     stdscr.addstr(curses.LINES - 2, 5, " " * len(command))
     stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
-    lc_write(command)
-    if len(command) > 0 and command[0] == "/":
+
+    if command[0] == "/":
       commandls = command.split("/")
       commandls = commandls[1].split(" ")
       if trycommand(commandls[0]):
         commandout = docommand(commandls[0], commandls[1::])
         cl_write(commandout)
+    elif localroom != "local":
+      message(command)
+    else:
+      lc_write(command)
 
     command = ""
   elif c > 31 and c <= 126:

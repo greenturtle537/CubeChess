@@ -163,6 +163,8 @@ class ChessServer(BaseHTTPRequestHandler):
       self.wfile.write(bytes(json.dumps(jload("rooms.json")), "utf-8"))
 
     if p == "/message":
+      # Result 0 indicates "User/Room not found"
+      # Result 1 indicates success
       username = query_components["username"]
       message = query_components["message"]
       userjson = jload("users.json")
@@ -171,10 +173,9 @@ class ChessServer(BaseHTTPRequestHandler):
         activeroom = jload("rooms/%s.json" % userjson[username]["activity"])
         chatitem = chat(username, message)
         activeroom.append(chatitem)
-        self.wfile.write(bytes(json.dumps(chatitem), "utf-8"))
+        self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
       else:
-        self.wfile.write(
-          bytes(json.dumps({"result": "User/Room not found"}), "utf-8"))
+        self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))
 
     if p == "/join":
       # Result 0 indicates "User/Room not found"
