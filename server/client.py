@@ -6,6 +6,7 @@ import time
 import curses
 import curses.textpad
 from datetime import datetime
+import numbers
 
 
 #curses routines
@@ -38,8 +39,21 @@ def center_text(text, y, pad="", attr=curses.A_NORMAL):
   stdscr.addstr(y, num, text, attr)
 
 
+def datetime_from_utc_to_local(utc_datetime):  # Borrowed function
+  now_timestamp = time.time()
+  offset = datetime.fromtimestamp(now_timestamp) - datetime.utcfromtimestamp(
+    now_timestamp)
+  return utc_datetime + offset
+
+
 def time2string(time):
   return datetime.strftime(time, timestd)
+
+
+def ltime(time):
+  dif = get_time() - string2time(time)
+  newtime = string2time(time) + dif
+  return time2string(newtime)
 
 
 def get_time():
@@ -151,21 +165,36 @@ def message(msg):
     return "User/Room not found"
 
 
-def users():
+def users(*args):
   r = requests.get("http://glitchtech.top:8/users")
-  req = r.json()
-  return req
+  res = r.json()
+  usercount = len(res)
+  userlist = [
+    "There are %s users online" % usercount,
+    "Username    Last Updated    Activity"
+  ]
+  for user in list(res):
+    if isinstance(res[user]["activity"], numbers.Number):
+      activity = activitychart[res[user]["activity"]]
+    else:
+      activity = res[user]["activity"]
+    time = clean_time(res[user]["keepalive"])
+    userlist.append("%s%s%s" % (user.ljust(12), time.ljust(16), activity))
+  return userlist
 
 
 def keepalive(userid):
   r = requests.get("http://glitchtech.top:8/keepalive",
                    params={"username": userid})
   result = r.json()
+  #{'timestamp': '09:10:23:00:12:02:049792', 'author': 'a', 'message': 'ok'}
+  for i in result:
+    write(i["author"], clean_time(ltime(i["timestamp"])), i["message"])
   return result
 
 
 #Keep at bottom
-functionmap = {"connect": connect, "help": help, "join": join}
+functionmap = {"connect": connect, "help": help, "join": join, "users": users}
 
 #Code entry
 
@@ -180,6 +209,7 @@ buffer = []
 timestd = "%m:%d:%y:%H:%M:%S:%f"
 localusername = "local"
 localroom = "local"
+activitychart = {0: "Logged in"}
 
 center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
 center_text("| GlitchChat v0.2 |", 1, "▓", curses.A_STANDOUT)
@@ -216,7 +246,7 @@ while True:
         commandout = docommand(commandls[0], commandls[1::])
         cl_write(commandout)
     elif localroom != "local":
-      lc_write(message(command))
+      message(command)
     else:
       lc_write(command)
 
@@ -232,3 +262,4 @@ while True:
 
   stdscr.refresh()
 stop_curses(stdscr)
+print("~GlitchChat Client Terminated~")
