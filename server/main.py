@@ -174,8 +174,8 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/message":
       # Result 0 indicates "User/Room not found"
       # Result 1 indicates success
-      username = query_components["username"]
-      message = query_components["message"]
+      username = de(query_components["username"])
+      message = de(query_components["message"])
       userjson = jload("users.json")
       if username in userjson and not isinstance(
           userjson[username]["activity"], numbers.Number):
@@ -190,8 +190,8 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/join":
       # Result 0 indicates "User/Room not found"
       # Result 1 indicates success
-      username = query_components["username"]
-      room = query_components["room"]
+      username = de(query_components["username"])
+      room = de(query_components["room"])
       userjson = jload("users.json")
       roomsjson = jload("rooms.json")
       if username in userjson and room in roomsjson:
@@ -203,7 +203,7 @@ class ChessServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))
 
     if p == "/keepalive":
-      username = query_components["username"]
+      username = de(query_components["username"])
       userjson = jload("users.json")
       newmsgs = []
       if username in userjson:

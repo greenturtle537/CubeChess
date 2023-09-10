@@ -124,7 +124,6 @@ def connect(*args):
   username = args[0][0]
   if username == "local":
     return "This username is reserved"
-  cl_write(en(username))
   r = requests.get("http://glitchtech.top:8/connect",
                    params={"username": en(username)})
   result = r.json()
@@ -145,8 +144,8 @@ def join(*args):
   room = args[0]
   r = requests.get("http://glitchtech.top:8/join",
                    params={
-                     "username": localusername,
-                     "room": room
+                     "username": en(localusername),
+                     "room": en(room)
                    })
   result = r.json()
   if result["result"] == 1:
@@ -161,8 +160,8 @@ def message(msg):
   cl_write(en(msg))
   r = requests.get("http://glitchtech.top:8/message",
                    params={
-                     "username": localusername,
-                     "message": msg
+                     "username": en(localusername),
+                     "message": en(msg)
                    })
   result = r.json()
   if result["result"] == 1:
@@ -191,7 +190,7 @@ def users(*args):
 
 def keepalive(userid):
   r = requests.get("http://glitchtech.top:8/keepalive",
-                   params={"username": userid})
+                   params={"username": en(userid)})
   result = r.json()
   #{'timestamp': '09:10:23:00:12:02:049792', 'author': 'a', 'message': 'ok'}
   for i in result:
