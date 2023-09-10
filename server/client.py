@@ -243,7 +243,7 @@ while True:
   #ping(counter, count)
   if c == 27:  # Codes to escape(esc)
     break  # Exit the while loop
-  elif c == curses.KEY_BACKSPACE or c == 127:  #Backspace is encoded as 127/DEL on chromebooks
+  elif c == curses.KEY_BACKSPACE or c == 127:  #Backspace is encoded as 127/DEL on some devices
     command = command[0:len(command) - 1]
     stdscr.addstr(curses.LINES - 2, 5, command + " ")
     stdscr.addstr(curses.LINES - 2, 5,
