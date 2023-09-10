@@ -141,7 +141,7 @@ def connect(*args):
 def join(*args):
   if localusername == "local":
     return "Connect to the server first"
-  room = args[0]
+  room = args[0][0]
   r = requests.get("http://glitchtech.top:8/join",
                    params={
                      "username": en(localusername),
@@ -150,14 +150,14 @@ def join(*args):
   result = r.json()
   if result["result"] == 1:
     global localroom
-    localroom = room[0]
-    return "Connected to %s" % room[0]
+    localroom = room
+    return "Connected to %s" % room
   else:
     return "User/Room not found"
 
 
 def message(msg):
-  cl_write(en(msg))
+  #cl_write(en(msg))
   r = requests.get("http://glitchtech.top:8/message",
                    params={
                      "username": en(localusername),
