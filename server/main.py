@@ -30,12 +30,7 @@ def base64_decode(string):
 
 
 def de(input_str):
-  print(input_str)
-  str = base64_decode(input_str)
-  print(str)
-  str = str.decode("utf-8")
-  print(str)
-  return str
+  return base64.urlsafe_b64decode(input_str).decode("utf-8")
 
 
 def jwrite(file, out_json, operation="w+"):

@@ -32,7 +32,7 @@ def base64_encode(s):
 
 
 def en(input):
-  return base64_encode(bytes(input, "utf-8"))
+  return base64.urlsafe_b64encode(bytes(input, "utf-8"))
 
 
 def center_text(text, y, pad="", attr=curses.A_NORMAL):
