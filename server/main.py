@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-import base62
+import base64
 from urllib.parse import urlparse
 import os
 from datetime import datetime
@@ -20,8 +20,12 @@ def in_index(mylist, target):
   return False
 
 
+def base64_decode(string):
+  return base64.urlsafe_b64decode((string + (b"=" * (4 - (len(string) % 4)))))
+
+
 def de(input_str):
-  return base62.decodebytes(input_str).decode("utf-8")
+  return base64_decode(input_str).decode("utf-8")
 
 
 def jwrite(file, out_json, operation="w+"):

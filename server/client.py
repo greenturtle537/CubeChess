@@ -1,12 +1,12 @@
 import requests
 import base62
-from time import sleep
 import os
 import time
 import curses
 import curses.textpad
 from datetime import datetime
 import numbers
+import base64
 
 
 #curses routines
@@ -28,8 +28,12 @@ def cls():
   os.system('cls' if os.name == 'nt' else 'clear')
 
 
+def base64_encode(string):
+  return base64.urlsafe_b64encode(string).strip(b"=")
+
+
 def en(input):
-  return base62.encodebytes(bytes(input, "utf-8"))
+  return base64_encode(bytes(input, "utf-8"))
 
 
 def center_text(text, y, pad="", attr=curses.A_NORMAL):
@@ -110,7 +114,8 @@ def docommand(commandtext, *args):
 
 def help(*args):
   helplist = [
-    "/help ~ Display this text", "/connect <username> ~ Connect to the server"
+    "/help ~ Display this text", "/connect <username> ~ Connect to the server",
+    "/join <room> ~ Join a room", "/users ~ Display online users"
   ]
   return helplist
 
@@ -153,6 +158,7 @@ def join(*args):
 
 
 def message(msg):
+  cl_write(en(msg))
   r = requests.get("http://glitchtech.top:8/message",
                    params={
                      "username": localusername,
