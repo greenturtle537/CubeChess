@@ -32,7 +32,7 @@ def base64_encode(s):
 
 
 def en(input):
-  return base64.urlsafe_b64encode(bytes(input, "utf-8"))
+  return base64.urlsafe_b64encode(bytes(input, "utf-8")).replace(b'=', b'~')
 
 
 def center_text(text, y, pad="", attr=curses.A_NORMAL):
@@ -124,7 +124,8 @@ def connect(*args):
   username = args[0][0]
   if username == "local":
     return "This username is reserved"
-  r = requests.get("http://glitchtech.top:8/connect",
+  cl_write(en(username))
+  '''r = requests.get("http://glitchtech.top:8/connect",
                    params={"username": en(username)})
   result = r.json()
   if result["result"] == 1:
@@ -135,7 +136,7 @@ def connect(*args):
     return [
       "This username is already in use",
       "Please wait a few seconds before trying again"
-    ]
+    ]'''
 
 
 def join(*args):
