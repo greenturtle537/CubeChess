@@ -6,7 +6,7 @@ It's pretty nifty
 
 ## install:
 Ensure the python extensions are installed
-```pip install blessed pybase62```
+```pip install blessed ```
 
 
 

@@ -3,9 +3,9 @@
     "server/client.py": [
       {
         "id": "e6f201e9-04b1-42a2-b3c2-eb353b391800",
-        "line": 34,
-        "version": 5322,
-        "index": 502
+        "line": 39,
+        "version": 7737,
+        "index": 604
       }
     ],
     "server/commands.py": [
