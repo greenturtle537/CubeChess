@@ -173,6 +173,7 @@ class ChessServer(BaseHTTPRequestHandler):
         activeroom = jload("rooms/%s.json" % userjson[username]["activity"])
         chatitem = chat(username, message)
         activeroom.append(chatitem)
+        jwrite("rooms/%s.json" % userjson[username]["activity"], activeroom)
         self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
       else:
         self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))

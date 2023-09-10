@@ -131,6 +131,7 @@ def join(*args):
                    })
   result = r.json()
   if result["result"] == 1:
+    global localroom
     localroom = room[0]
     return "Connected to %s" % room[0]
   else:
@@ -215,7 +216,7 @@ while True:
         commandout = docommand(commandls[0], commandls[1::])
         cl_write(commandout)
     elif localroom != "local":
-      message(command)
+      lc_write(message(command))
     else:
       lc_write(command)
 
