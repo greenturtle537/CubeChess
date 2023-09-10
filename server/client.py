@@ -27,8 +27,8 @@ def cls():
   os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def base64_encode(string):
-  return base64.urlsafe_b64encode(string).strip(b"=")
+def base64_encode(s):
+  return base64.urlsafe_b64encode(s).strip(b"=")
 
 
 def en(input):
@@ -121,15 +121,15 @@ def help(*args):
 
 # requests routines
 def connect(*args):
-  username = args[0]
-  if username[0] == "local":
+  username = args[0][0]
+  if username == "local":
     return "This username is reserved"
   r = requests.get("http://glitchtech.top:8/connect",
                    params={"username": en(username)})
   result = r.json()
   if result["result"] == 1:
     global localusername
-    localusername = username[0]
+    localusername = username
     return "Connected as %s" % localusername
   else:
     return [
