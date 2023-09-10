@@ -125,7 +125,7 @@ def connect(*args):
   if username == "local":
     return "This username is reserved"
   cl_write(en(username))
-  '''r = requests.get("http://glitchtech.top:8/connect",
+  r = requests.get("http://glitchtech.top:8/connect",
                    params={"username": en(username)})
   result = r.json()
   if result["result"] == 1:
@@ -136,7 +136,7 @@ def connect(*args):
     return [
       "This username is already in use",
       "Please wait a few seconds before trying again"
-    ]'''
+    ]
 
 
 def join(*args):
