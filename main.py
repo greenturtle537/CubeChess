@@ -417,6 +417,66 @@ class dummypiece:
 
 
 
+
+
+
+
+
+class MenuFuncs:
+  menu = 'main'
+    
+  def MainMenuLoop():
+    while True:
+      if MenuFuncs.menu == 'main': MenuFuncs.MainMenu()
+      elif MenuFuncs.menu == 'local': MenuFuncs.LocalMenu()
+      elif MenuFuncs.menu == 'online': MenuFuncs.OnlineMenu()
+      elif MenuFuncs.menu == 'settings': MenuFuncs.LocalMenu()
+  
+  def MainMenu(): 
+    title = ttype.t.rgb(202,202,202) + \
+f"""
+    + ──────────── +          
+    │╲              ╲
+    │ ╲              ╲
+    │  + ──────────── +
+    │  │              │
+    │  │              │ 
+    +  │  C  u  b  e  │  C  h  e  s  s{ttype.t.normal+ttype.t.rgb(202,202,202)}
+     ╲ │              │
+      ╲│              │
+       + ──────────── +{ttype.t.normal}
+""".replace('C',ttype.t.rgb(255,255,255)+ttype.t.bold+'C').replace('│',ttype.t.normal+ttype.t.rgb(202,202,202)+'│')
+
+    print(title)
+    ttype.xyprint("1) local", 8, 13)
+    ttype.xyprint("2) online", 8, 14)
+    ttype.xyprint("3) settings", 8, 15)
+    ttype.xyprint("4) exit game", 8, 16)
+
+    inkey = ttype.RestrictedInkey(['1','2','3','4'])
+
+    if inkey == '1': MenuFuncs.menu = 'local'
+    elif inkey == '2': MenuFuncs.menu = 'online'
+    elif inkey == '3': MenuFuncs.menu = 'settings'
+    elif inkey == '4': MenuFuncs.menu = 'exit game'
+    
+
+  def LocalMenu(): pass
+  def OnlineMenu(): 
+    for y in range(13,16): ttype.clearline(y)
+    ttype.RestrictedInkey(['1','2'])
+    
+    
+  def SettingsMenu(): pass
+
+
+
+
+MenuFuncs.MainMenu()
+
+
+
+
 def Run():
   with ttype.t.hidden_cursor(), ttype.t.cbreak():
     InitFunctionRecallVars()
@@ -440,7 +500,7 @@ def Run():
     
 
 
-if __name__ == '__main__': Run()
+# if __name__ == '__main__': Run()
 
 
 ttype.xyinput('>>> ', 0, ttype.t.height-1)
