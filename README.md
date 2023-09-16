@@ -6,7 +6,7 @@ It's pretty nifty
 
 ## install:
 Ensure the python extensions are installed
-```pip install blessed ```
+```pip install blessed requests```
 
 
 

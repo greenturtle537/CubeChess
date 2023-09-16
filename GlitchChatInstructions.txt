@@ -1,8 +1,0 @@
-Open the shell:
-
-cd server
-python client.py
-
-The only working chatroom is global
-
-URL-unsafe characters will cause a client-side failure, to be patched out soon
