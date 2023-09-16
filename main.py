@@ -582,7 +582,7 @@ class dummypiece:
     pass
 
 
-def Run():
+def Run(online=False):
   with ttype.t.hidden_cursor(), ttype.t.cbreak():
     InitFunctionRecallVars()
     ReadMods()
@@ -597,33 +597,17 @@ def Run():
 
     PrintBoard()
     DrawPieces()
+
+    if online:
+      pass
+
     while True:
       Game.turn += 1
       ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
       GetPieceMove()
       DrawPieces()
-
-
-def OnlineRun():
-  with ttype.t.hidden_cursor(), ttype.t.cbreak():
-    InitFunctionRecallVars()
-    ReadMods()
-    LoadMods()
-    LoadSettings()
-    sleep(1)
-    InitSelector()
-
-    Board._defvars()
-
-    ttype.clear()
-
-    PrintBoard()
-    DrawPieces()
-    while True:
-      Game.turn += 1
-      ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
-      GetPieceMove()
-      DrawPieces()
+      if online:
+        pass
 
 
 class MenuFuncs:
@@ -672,7 +656,7 @@ f"""
     for y in range(13, 16):
       ttype.clearline(y)
     ttype.RestrictedInkey(['1', '2'])
-    OnlineRun()
+    Run(True)
 
   def SettingsMenu():
     Run()
