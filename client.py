@@ -31,22 +31,11 @@ def string2time(string):
 
 
 # requests routines
-def connect(*args):
-  username = args[0][0]
-  if username == "local":
-    return "This username is reserved"
+def connect(username):
   r = requests.get("http://glitchtech.top:8/connect",
                    params={"username": en(username)})
   result = r.json()
-  if result["result"] == 1:
-    global localusername
-    localusername = username
-    return "Connected as %s" % localusername
-  else:
-    return [
-      "This username is already in use",
-      "Please wait a few seconds before trying again"
-    ]
+  return result["result"]
 
 
 def join(*args):
@@ -99,11 +88,9 @@ def users(*args):
   return userlist
 
 
-def keepalive(userid):
+def keepalive(username):
   r = requests.get("http://glitchtech.top:8/keepalive",
-                   params={"username": en(userid)})
+                   params={"username": en(username)})
   result = r.json()
   #{'timestamp': '09:10:23:00:12:02:049792', 'author': 'a', 'message': 'ok'}
-  #for i in result:
-  #  write(i["author"], clean_time(ltime(i["timestamp"])), i["message"])
   return result

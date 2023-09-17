@@ -2,6 +2,7 @@ import codeAssets.addons.typewriter as ttype
 import codeAssets.addons.easyjson as json
 import codeAssets.addons.colorcalc as colorcalc
 from time import sleep
+import time
 import client
 
 
@@ -599,7 +600,15 @@ def Run(online=False):
     DrawPieces()
 
     if online:
-      pass
+      while True:
+        username = "test"  # Todo notme add input line here
+        response = client.connect(username)
+        # 1=success, 0=username taken/reserved
+        if response:
+          break
+        else:
+          pass  #Todo notme add error message
+      start = time.time()
 
     while True:
       Game.turn += 1
@@ -607,7 +616,11 @@ def Run(online=False):
       GetPieceMove()
       DrawPieces()
       if online:
-        pass
+        if time.time() - start > 1:
+          log = client.keepalive(username)
+          #Log contains list of all new messages since connection, most often empty
+          for item in log:
+            pass  #Todo add handles for log items
 
 
 class MenuFuncs:
