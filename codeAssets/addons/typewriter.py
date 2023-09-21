@@ -36,10 +36,13 @@ def Inkey(timeout: float = 0) -> str:
     if timeout: return t.inkey(timeout=timeout)
     else: return t.inkey()
 
-def RestrictedInkey(AllowedKeys: list) -> str:
+def RestrictedInkey(AllowedKeys: list, timeout: float = 0.00) -> str:
   with t.cbreak():
     key = ''
-    while key not in AllowedKeys: key = t.inkey()
+    while key not in AllowedKeys: 
+      if timeout: key = t.inkey(timeout)
+      else: key = t.inkey()
+      if key == '': return ''
   return key
 
 

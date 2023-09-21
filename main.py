@@ -139,7 +139,7 @@ def PrintBoard():
             6 + 10 * x, 4 + 4 * y)
 
 
-def SelectBoardSpace():
+def SelectBoardSpace(online=False):
   selected1 = None
   with ttype.t.hidden_cursor():
     while True:
@@ -151,7 +151,7 @@ def SelectBoardSpace():
 
       if selectorStyle == 'classic':
         inkey = ttype.RestrictedInkey(
-          ['w', 'a', 's', 'd', 'e', ' ', '\n', 'r', 'W', 'A', 'S', 'D'])
+          ['w', 'a', 's', 'd', 'e', ' ', '\n', 'r', 'W', 'A', 'S', 'D'], 0.1)
       elif selectorStyle == 'improved':
         inkey = ttype.RestrictedInkey([
           'q', 'w', 'e', 'a', 'd', 'z', 'x', 'c', 'Q', 'W', 'E', 'A', 'D', 'Z',
@@ -162,6 +162,10 @@ def SelectBoardSpace():
           'q', 'w', 'e', 'a', 'd', 'z', 's', 'c', 'Q', 'W', 'E', 'A', 'D', 'Z',
           'S', 'C', '\n', ' '
         ])
+
+      if online and inkey == "":
+        return False
+        #Escape routine for non-blocking online play
 
       # draw over where the cursor was
       try:
@@ -312,9 +316,13 @@ def CheckDirection(pOld, pNew):
   return (pNew[0] - pOld[0], pNew[1] - pOld[1])
 
 
-def GetPieceMove():
+def GetPieceMove(online=False):
   while True:
-    selection = SelectBoardSpace()
+    selection = SelectBoardSpace(online)
+
+    if online and not selection:
+      return False
+      #Escape routine for non-blocking online play
 
     # if you select 2 different squares and the first one is a piece
     if selection[0] != selection[1] and PieceAt(selection[0][0],
@@ -613,7 +621,7 @@ def Run(online=False):
     while True:
       Game.turn += 1
       ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
-      GetPieceMove()
+      GetPieceMove(online)
       DrawPieces()
       if online:
         if time.time() - start > 1:
