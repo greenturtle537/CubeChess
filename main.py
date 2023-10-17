@@ -5,6 +5,10 @@ from time import sleep
 import time
 import client
 
+selected1 = None
+#boardSelection = None
+#selection = None
+
 
 def ReadMods():
   global dmLines
@@ -140,7 +144,8 @@ def PrintBoard():
 
 
 def SelectBoardSpace(online=False):
-  selected1 = None
+  #selected1 = None
+  global selected1
   with ttype.t.hidden_cursor():
     while True:
       x, y = boardSelection[0], boardSelection[1]
@@ -220,7 +225,9 @@ def SelectBoardSpace(online=False):
             ttype.xyprint(
               f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯',
               6 + 10 * selected1[0], 4 + 4 * selected1[1])
-            return [selected1, (x, y)]
+            selected2 = selected1
+            selected1 = None
+            return [selected2, (x, y)]
 
       elif selectorStyle == 'improved':
         if inkey in ['Q', 'W', 'E']: boardSelection[1] = 0
@@ -272,7 +279,12 @@ def SelectBoardSpace(online=False):
             ttype.xyprint(
               f'{BoardColor1 if ((x%2)+(y%2))%2 else BoardColor2}╰ ╯',
               6 + 10 * selected1[0], 4 + 4 * selected1[1])
-            return [selected1, (x, y)]
+            choice = selected1
+            selected1 = None
+            return [choice, (x, y)]
+
+          else:
+            selected1 = None
 
 
 def InitFunctionRecallVars():
@@ -318,6 +330,7 @@ def CheckDirection(pOld, pNew):
 
 def GetPieceMove(online=False):
   while True:
+    #global selection
     selection = SelectBoardSpace(online)
 
     if online and not selection:
@@ -606,6 +619,7 @@ def Run(online=False):
 
     PrintBoard()
     DrawPieces()
+    piece_move = False
 
     if online:
       while True:
@@ -616,19 +630,25 @@ def Run(online=False):
           break
         else:
           pass  #Todo notme add error message
+      global start
       start = time.time()
-
     while True:
-      Game.turn += 1
-      ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
-      GetPieceMove(online)
+      if piece_move != False:
+        Game.turn += 1
+        ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
+      piece_move = GetPieceMove(online)
       DrawPieces()
       if online:
         if time.time() - start > 1:
+          start = time.time()
           log = client.keepalive(username)
           #Log contains list of all new messages since connection, most often empty
           for item in log:
             pass  #Todo add handles for log items
+
+
+def online_refresh():
+  return False
 
 
 class MenuFuncs:
@@ -684,6 +704,8 @@ f"""
 
 
 MenuFuncs.MainMenu()
+
+start = time.time()
 
 #if __name__ == '__main__': Run()
 
