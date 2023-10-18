@@ -4,6 +4,7 @@ import codeAssets.addons.colorcalc as colorcalc
 from time import sleep
 import time
 import client
+from random import randint
 
 selected1 = None
 #boardSelection = None
@@ -626,13 +627,14 @@ def Run(online=False):
 
     if online:
       while True:
-        username = "test"  # Todo notme add input line here
+        username = "test"+str(randint(1,999))
+        # Todo notme add input line here
         response = client.connect(username)
         # 1=success, 0=username taken/reserved
         if response:
           break
         else:
-          pass  #Todo notme add error message
+          pass  # Todo notme add error message
       global start
       start = time.time()
     while True:
@@ -645,7 +647,8 @@ def Run(online=False):
         if time.time() - start > 1:
           start = time.time()
           log = client.keepalive(username)
-          #Log contains list of all new messages since connection, most often empty
+          # Log contains list of all new messages since last connection
+          # But they are most often empty
           for item in log:
             pass  #Todo add handles for log items
 
