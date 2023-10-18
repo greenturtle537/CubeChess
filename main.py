@@ -357,7 +357,7 @@ def GetPieceMove(online=False):
 
         if piece.canJumpEmpties and piece.canJumpPieces:
           movePiece()
-          return
+          return True
 
         crossesEmpty = jumpsPiece = False
         if direction in ['up', 'down']:
@@ -390,7 +390,9 @@ def GetPieceMove(online=False):
         if jumpsPiece and not piece.canJumpPieces: canMove = False
         if crossesEmpty and not piece.canJumpEmpties: canMove = False
 
-        if canMove: movePiece()
+        if canMove:
+          movePiece()
+          return True
 
       # attacking code
       elif ((direction in piece.attackPath) or (vector in piece.attackPath) or
@@ -408,7 +410,7 @@ def GetPieceMove(online=False):
             if piece.canJumpEmpties and piece.canJumpPieces:
               PieceAt(selection[1][0], selection[1][1])[1].remove()
               movePiece()
-              return
+              return True
 
             crossesEmpty = jumpsPiece = False
             if direction in ['up', 'down']:
@@ -445,6 +447,7 @@ def GetPieceMove(online=False):
             if canMove:
               PieceAt(selection[1][0], selection[1][1])[1].remove()
               movePiece()
+              return True
 
 
 def ReversePieceDirection(dir):
@@ -635,7 +638,7 @@ def Run(online=False):
     while True:
       if piece_move != False:
         Game.turn += 1
-        ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
+      ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
       piece_move = GetPieceMove(online)
       DrawPieces()
       if online:
