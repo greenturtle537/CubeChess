@@ -1,12 +1,3 @@
 {
-  "files": {
-    "server/commands.py": [
-      {
-        "id": "fdf33a28-a273-49a0-81a3-154fe398e5c2",
-        "line": 1,
-        "version": 309,
-        "index": 0
-      }
-    ]
-  }
+  "files": {}
 }

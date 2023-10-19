@@ -3,6 +3,8 @@ from datetime import datetime
 import numbers
 import base64
 
+userheader = "test"
+
 
 def en(input):
   return base64.urlsafe_b64encode(bytes(input, "utf-8")).replace(b'=', b'~')
@@ -94,3 +96,29 @@ def keepalive(username):
   result = r.json()
   #{'timestamp': '09:10:23:00:12:02:049792', 'author': 'a', 'message': 'ok'}
   return result
+
+
+def rooms():
+  def rooms(*args):
+  r = requests.get("http://glitchtech.top:8/rooms")
+  res = r.json()
+  roomcount = len(res)
+  r = requests.get("http://glitchtech.top:8/users")
+  userlist = r.json()
+  roomlist = [
+      "There are %s rooms open" % roomcount,
+      "Room        Last Updated        Users"
+  ]
+  for room in list(res):
+    presentusers = 0
+    for user in list(userlist):
+      numbercheck = isinstance(userlist[user]["activity"], numbers.Number)
+      if not numbercheck and userlist[user]["activity"] == room:
+        presentusers += 1
+    #time = clean_time(res[room]["lifetime"])
+    #Properly store lifetimes serverside first
+    time = clean_time(time2string(get_time()))
+    roomlist.append("%s%s%s" % (room.ljust(16), time.ljust(20), presentusers))
+  return roomlist
+
+def 

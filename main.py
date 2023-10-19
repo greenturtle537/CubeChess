@@ -333,6 +333,7 @@ def GetPieceMove(online=False):
   while True:
     #global selection
     selection = SelectBoardSpace(online)
+    
 
     if online and not selection:
       return False
@@ -358,7 +359,7 @@ def GetPieceMove(online=False):
 
         if piece.canJumpEmpties and piece.canJumpPieces:
           movePiece()
-          return True
+          return selection
 
         crossesEmpty = jumpsPiece = False
         if direction in ['up', 'down']:
@@ -393,7 +394,7 @@ def GetPieceMove(online=False):
 
         if canMove:
           movePiece()
-          return True
+          return selection
 
       # attacking code
       elif ((direction in piece.attackPath) or (vector in piece.attackPath) or
@@ -411,7 +412,7 @@ def GetPieceMove(online=False):
             if piece.canJumpEmpties and piece.canJumpPieces:
               PieceAt(selection[1][0], selection[1][1])[1].remove()
               movePiece()
-              return True
+              return selection
 
             crossesEmpty = jumpsPiece = False
             if direction in ['up', 'down']:
@@ -448,7 +449,7 @@ def GetPieceMove(online=False):
             if canMove:
               PieceAt(selection[1][0], selection[1][1])[1].remove()
               movePiece()
-              return True
+              return selection
 
 
 def ReversePieceDirection(dir):
@@ -610,6 +611,23 @@ class dummypiece:
 
 def Run(online=False):
   with ttype.t.hidden_cursor(), ttype.t.cbreak():
+    if online:
+      while True:
+        username = "test"+str(randint(1,999))
+        # Todo notme add input line here
+        response = client.connect(username)
+        # 1=success, 0=username taken/reserved
+        if response:
+          break
+        else:
+          pass  # Todo notme add error message
+      ttype.xyprint("You have connected as %s" % username, 0, 0)
+      ttype.xyprint("Would you like to join a room or start a new one?",0,1)
+      
+      
+      sleep(2)
+      while True:
+        break
     InitFunctionRecallVars()
     ReadMods()
     LoadMods()
@@ -624,23 +642,15 @@ def Run(online=False):
     PrintBoard()
     DrawPieces()
     piece_move = False
-
-    if online:
-      while True:
-        username = "test"+str(randint(1,999))
-        # Todo notme add input line here
-        response = client.connect(username)
-        # 1=success, 0=username taken/reserved
-        if response:
-          break
-        else:
-          pass  # Todo notme add error message
-      global start
-      start = time.time()
+    
+    global start
+    start = time.time()
+    
     while True:
       if piece_move != False:
         Game.turn += 1
       ttype.xyprint(f'{ttype.t.rgb(160,160,160)}Turn: {Game.turn}', 0, 0)
+      ttype.xyprint(piece_move, 0, 30)
       piece_move = GetPieceMove(online)
       DrawPieces()
       if online:
@@ -702,7 +712,7 @@ f"""
   def OnlineMenu():
     for y in range(13, 16):
       ttype.clearline(y)
-    ttype.RestrictedInkey(['1', '2'])
+    #ttype.RestrictedInkey(['1', '2'])
     Run(True)
 
   def SettingsMenu():

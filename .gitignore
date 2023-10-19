@@ -1,1 +1,9 @@
 server/
+.replit
+replit.nix
+pyproject.toml
+poetry.lock
+.breakpoints
+__pycache__
+.upm
+venv
