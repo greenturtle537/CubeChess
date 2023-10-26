@@ -18,3 +18,5 @@ Ensure the python extensions are installed
  e / space / enter     ---     select
  r                     ---     redraw boardw
  lshift + wasd         ---     move selector to edge
+
+ todo an escape key
