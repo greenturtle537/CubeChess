@@ -99,7 +99,6 @@ def keepalive(username):
 
 
 def rooms():
-  def rooms(*args):
   r = requests.get("http://glitchtech.top:8/rooms")
   res = r.json()
   roomcount = len(res)
