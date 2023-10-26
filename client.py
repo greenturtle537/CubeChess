@@ -121,4 +121,6 @@ def rooms():
     roomlist.append("%s%s%s" % (room.ljust(16), time.ljust(20), presentusers))
   return roomlist
 
-def 
+
+def superconnect():
+  print("hi")

@@ -1,3 +1,4 @@
+import blessed
 import codeAssets.addons.typewriter as ttype
 import codeAssets.addons.easyjson as json
 import codeAssets.addons.colorcalc as colorcalc
@@ -723,6 +724,6 @@ MenuFuncs.MainMenu()
 
 start = time.time()
 
-#if __name__ == '__main__': Run()
+if __name__ == '__main__': client.superconnect()
 
 ttype.xyinput('>>> ', 0, ttype.t.height - 1)
